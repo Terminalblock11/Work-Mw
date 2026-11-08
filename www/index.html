@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WorkMw Vacancy Generator</title>
+<style>@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-400-normal.woff2) format("woff2")}@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-700-normal.woff2) format("woff2")}@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-800-normal.woff2) format("woff2")}</style>
+<style>
+:root{--bg:#eef2f9;--card:#fff;--ink:#0f1222;--mute:#5b6475;--line:#dfe5f0;--green:#1440f0;--green-ink:#fff;--warn:#8a5a00;--warn-bg:#fff4d6;--ok-bg:#e6edfd;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#141b30;--ink:#eef1fa;--mute:#9ba6c1;--line:#26304d;--green:#4d7dff;--green-ink:#fff;--warn:#ffd27a;--warn-bg:#3a2e10;--ok-bg:#16264a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#141b30;--ink:#eef1fa;--mute:#9ba6c1;--line:#26304d;--green:#4d7dff;--green-ink:#fff;--warn:#ffd27a;--warn-bg:#3a2e10;--ok-bg:#16264a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.top{background:var(--card);color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 24px;font-weight:600;font-size:14px}
+.swl{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;margin:0}
+.top .sw{position:relative;width:46px;height:26px;padding:0;border-radius:999px;border:1px solid var(--line);background:var(--line);transition:background .2s}
+.sw i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.top .sw[aria-checked="true"]{background:var(--green);border-color:var(--green)}
+.sw[aria-checked="true"] i{transform:translateX(20px)}
+.top .tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top button{padding:7px 12px;font-size:13px;color:var(--green)}
+.top img{height:34px;width:auto;display:block;background:#fff;border-radius:8px;padding:6px 10px}
+.hero{background:linear-gradient(180deg,#1440f0 0%,#0b1a7a 65%,#020a30 100%);color:#fff;padding:32px 24px 72px}
+.hero .in{max-width:1200px;margin:0 auto}
+.hero h1{margin:0 0 6px;font-size:clamp(26px,4.2vw,40px);line-height:1.15;letter-spacing:-.02em;font-weight:800}
+.hero p{margin:0 0 16px;opacity:.85}
+.pill{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;margin:0 6px 6px 0}
+.seg{display:none;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 16px;gap:8px}
+.seg button{flex:1}
+main{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1200px;margin:-44px auto 0;padding:0 24px 48px;align-items:start}
+.card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(15,25,60,.08)}
+.card+.card{margin-top:16px}
+h2{margin:0 0 12px;font-size:18px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+label{display:block;font-size:12.5px;color:var(--mute);margin-bottom:4px}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+textarea{resize:vertical;min-height:84px}
+input:focus,textarea:focus{outline:2px solid var(--green);outline-offset:-1px}
+button{font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--green);border-radius:10px;padding:9px 16px}
+button.on,button.primary{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+button:disabled{opacity:.6}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:12px;color:var(--mute);margin:4px 0 0}
+details summary{cursor:pointer;font-weight:700}
+.status{font-size:13px;border-radius:12px;padding:10px 12px;margin:12px 0}
+.status.ok{background:var(--ok-bg)}
+.status.warn{background:var(--warn-bg);color:var(--warn)}
+.status ul{margin:4px 0 0;padding-left:18px}
+#out{min-height:420px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;white-space:pre-wrap}
+#promoCard,#roundCard{display:none}
+body[data-pk="round"] #roundCard{display:block}
+body[data-pk="promo"] #editPane>*:not(#promoCard){display:none!important}
+body[data-pk="promo"] #promoCard{display:block}
+#postPane{position:sticky;top:10px}
+@media(min-width:900px){#postPane{max-height:calc(100vh - 20px);overflow-y:auto}#pcv{max-height:calc(100vh - 190px);width:auto!important;max-width:100%;margin:0 auto}}
+#dash{display:none;max-width:1200px;margin:-44px auto 0;padding:0 24px 48px}
+body[data-page="dash"] #dash{display:block}
+body[data-page="dash"] main,body[data-page="dash"] .seg{display:none!important}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:var(--bg);border-radius:14px;padding:12px 14px}
+.stat b{display:block;font-size:26px;font-weight:800;line-height:1.1}
+.stat span{font-size:12px;color:var(--mute)}
+#dash .card+.card{margin-top:16px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
+.cols .card{margin-top:0!important}
+.row button.on,#dash button.on{background:var(--green);color:var(--green-ink)}
+#dash .row button{padding:6px 12px;font-size:13px}
+.rk{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin-bottom:10px;font-size:13px}
+.rk i{grid-column:1/-1;height:6px;border-radius:99px;background:var(--bg);overflow:hidden}
+.rk u{display:block;height:100%;background:var(--green);border-radius:99px}
+.chart{display:flex;align-items:flex-end;gap:4px;height:170px;margin-top:12px}
+.chart>div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-width:0;text-align:center}
+.chart .bar{display:flex;flex-direction:column-reverse;width:100%;border-radius:4px 4px 0 0;overflow:hidden}
+.chart .bar i{display:block;width:100%}
+.chart small{font-size:10px;color:var(--mute);white-space:nowrap;overflow:hidden;line-height:1.6}
+.w{background:var(--green)}.f{background:var(--mute)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle}
+.rr{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.rr small{color:var(--mute)}
+.rr .x{padding:2px 9px;color:var(--mute)}
+#dash details{border-top:1px solid var(--line);padding:8px 0}
+#dash summary{cursor:pointer;font-weight:500}
+@media(max-width:899px){#dash{margin-top:0;padding:10px 16px 40px}}
+.vt{display:none;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.vt button{padding:6px 12px;font-size:13px}
+.rawbox+.rawbox{margin-top:10px}
+.pv{font-size:14px}
+.pv .ph{background:linear-gradient(180deg,#1440f0,#06104d);color:#fff;border-radius:14px;padding:18px;margin-bottom:12px}
+.pv .co{display:flex;align-items:center;gap:10px;font-weight:700}
+.pv .tile{width:44px;height:44px;border-radius:12px;background:#fff;color:#1440f0;display:grid;place-items:center;font-weight:800}
+.pv h3{margin:12px 0 10px;font-size:22px;line-height:1.2;font-weight:800}
+.pv .box{background:var(--bg);border-radius:14px;padding:14px;margin-bottom:10px}
+.pv .box h4{margin:0 0 8px;font-size:15px}
+.pv p{color:var(--mute);margin:0 0 8px}
+.pv ul{margin:0;padding-left:18px;color:var(--mute)}
+.pv li{margin-bottom:4px}
+.pv .big{font-size:22px;font-weight:800}
+.pv .lbl{font-size:12px;color:var(--mute)}
+.pv .val{font-weight:700;margin-bottom:8px}
+.pv .btn{display:block;text-align:center;background:var(--green);color:var(--green-ink);border-radius:10px;padding:11px;font-weight:700;margin:10px 0}
+.pv .safe{background:var(--ok-bg)}
+@media(max-width:899px){
+.seg{display:flex}
+.hero{padding:22px 16px 28px}
+.top{padding:14px 16px}
+main{grid-template-columns:1fr;margin-top:0;padding:10px 16px 40px}
+.pane{display:none}
+body[data-view="edit"] #editPane,body[data-view="post"] #postPane{display:block}
+#postPane{position:static}
+.grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body data-view="edit" data-page="gen">
+<div class="top"><img src="data:image/png;base64,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" alt="WorkMw"><span class="tools"><button id="navGen" class="on" type="button">Generator</button><button id="navDash" type="button">Dashboard</button><label class="swl" for="theme"><span>Dark mode</span><button id="theme" class="sw" type="button" role="switch" aria-checked="false" aria-label="Dark mode"><i></i></button></label></span></div>
+<section class="hero"><div class="in"><h1 id="heroH">Create vacancy posts in seconds</h1><p id="heroP">Paste an advert, check the details, then copy it for WhatsApp or Facebook.</p><span class="pill">Auto-fill</span><span class="pill">WhatsApp</span><span class="pill">Facebook</span><span class="pill">Page preview</span><span class="pill">Poster</span></div></section>
+<div class="seg"><button id="vEdit" class="on" type="button">1. Fill in</button><button id="vPost" type="button">2. Copy post</button></div>
+<main>
+<section class="pane" id="editPane">
+<div class="card" id="roundCard">
+<h2>Roundup poster</h2>
+<p class="hint" style="margin:0 0 10px">Lists every vacancy in the generator on one poster. Add more with Auto-fill or the numbered tabs. Leave a box empty for automatic text.</p>
+<div class="grid">
+<div class="full"><label for="r_head">Headline</label><input id="r_head" placeholder="Automatic, e.g. 4 jobs|closing soon (use | for a line break)" autocomplete="off"></div>
+<div class="full"><label for="r_sub">Sub line</label><input id="r_sub" placeholder="Automatic" autocomplete="off"></div>
+<div class="full"><label for="r_cta">Call-to-action line</label><input id="r_cta" placeholder="Automatic. Put {words} in braces to colour them, | for a line break" autocomplete="off"></div>
+</div>
+</div>
+<div class="card" id="promoCard">
+<h2>Other posters</h2>
+<p class="hint" style="margin:0 0 10px">Pick a ready-made poster, then edit any text. Works with both layouts.</p>
+<div class="row" id="presets"></div>
+<div class="grid" style="margin-top:12px">
+<div><label for="p_badge">Top badge</label><input id="p_badge" placeholder="e.g. Job seekers" autocomplete="off"></div>
+<div><label for="p_kicker">Small heading</label><input id="p_kicker" placeholder="e.g. For job seekers" autocomplete="off"></div>
+<div class="full"><label for="p_tagline">Tagline</label><textarea id="p_tagline" rows="2" placeholder="One or two sentences"></textarea></div>
+<div class="full"><label for="p_title">Main title</label><input id="p_title" placeholder="e.g. CV &amp; Cover Letter Design" autocomplete="off"></div>
+<div><label for="p_hbadge">Blue box badge (sidebar layout)</label><input id="p_hbadge" placeholder="Now offering" autocomplete="off"></div>
+<div><label for="p_head">List heading</label><input id="p_head" placeholder="What you get" autocomplete="off"></div>
+<div class="full"><label for="p_pills">Tags, separated by commas (sidebar layout)</label><input id="p_pills" placeholder="Logos, Posters, Websites" autocomplete="off"></div>
+<div class="full"><label for="p_list">List items</label><textarea id="p_list" rows="6" placeholder="One per line, up to 6"></textarea></div>
+<div><label for="p_ctaLabel">Call-to-action label (sidebar)</label><input id="p_ctaLabel" placeholder="Get started" autocomplete="off"></div>
+<div><label for="p_ctaBig">Call-to-action big words (sidebar)</label><input id="p_ctaBig" placeholder="Order Now" autocomplete="off"></div>
+<div class="full"><label for="p_ctaNote">Call-to-action note (sidebar)</label><textarea id="p_ctaNote" rows="2"></textarea></div>
+<div class="full"><label for="p_bar">Blue bar text (footer layout)</label><input id="p_bar" placeholder="Send us a message today to order your design" autocomplete="off"></div>
+</div>
+<div class="row" style="margin-top:12px"><button id="pClear" type="button">Clear all</button></div>
+</div>
+<div class="card">
+<h2>Paste adverts</h2>
+<div id="raws"></div>
+<div class="row" style="margin-top:10px"><button id="auto" class="primary" type="button">Auto-fill</button><button id="addBox" type="button">+ Add paste box</button></div>
+<p id="autoMsg" class="hint">One advert per box. Empty boxes are skipped.</p>
+<div class="vt" style="margin-top:12px"></div>
+</div>
+<div class="card">
+<details id="settings">
+<summary>Your WorkMw links and footer</summary>
+<div class="grid" style="margin-top:10px">
+<div class="full"><label for="s_fb">Facebook page link</label><input id="s_fb" placeholder="https://facebook.com/..."></div>
+<div class="full"><label for="s_wa">WhatsApp group / channel link</label><input id="s_wa" placeholder="https://whatsapp.com/channel/..."></div>
+<div><label for="s_site">Website</label><input id="s_site" value="Workmw.com"></div>
+<div><label for="s_phone">WhatsApp number</label><input id="s_phone" value="+265 999 970 744"></div>
+<div class="full"><label for="s_email">Support email</label><input id="s_email" value="Workmw.support@gmail.com"></div>
+<div class="full"><label for="s_tags">Hashtags (Facebook post only)</label><input id="s_tags" value="#WorkMw #MalawiJobs #JobsInMalawi #Vacancy"></div>
+</div>
+<p class="hint">Saved on this device, so you only enter them once.</p>
+</details>
+</div>
+
+<div class="card">
+<h2>Job details</h2>
+<div class="grid" id="fields"></div>
+</div>
+
+<div class="card">
+<h2>Advert content</h2>
+<div class="grid">
+<div class="full"><label for="f_overview">Overview</label><textarea id="f_overview" rows="5" placeholder="About the organisation and the role. Leave a blank line between paragraphs."></textarea></div>
+<div class="full"><label for="f_resp">Key responsibilities</label><textarea id="f_resp" rows="6" placeholder="One per line"></textarea><p class="hint">Numbering is added for you. Leave empty to skip this section. For several positions, start each block with a line like ## Soil Laboratory Technician.</p></div>
+<div class="full"><label for="f_req">Key requirements</label><textarea id="f_req" rows="6" placeholder="One per line"></textarea></div>
+</div>
+</div>
+
+<div class="card">
+<h2>How to apply</h2>
+<div class="grid">
+<div class="full"><label for="f_applyText">Instructions</label><textarea id="f_applyText" rows="3" placeholder="Send your application, updated CV and copies of certificates to:"></textarea></div>
+<div><label for="f_applyEmail">Email</label><input id="f_applyEmail" placeholder="recruitment@company.com"></div>
+<div><label for="f_applyLink">Apply online link</label><input id="f_applyLink" placeholder="https://..."></div>
+<div class="full"><label for="f_applyNote">Closing note</label><textarea id="f_applyNote" rows="2" placeholder="Only shortlisted candidates will be contacted."></textarea></div>
+</div>
+</div>
+<div class="row" style="margin-top:12px"><button type="button" id="sample">Fill example</button><button type="button" id="clear">Clear form</button></div>
+</section>
+
+<section class="pane" id="postPane">
+<div class="card">
+<div class="vt"></div>
+<div class="row" style="justify-content:space-between">
+<div class="row"><button id="tWa" class="on" type="button">WhatsApp</button><button id="tFb" type="button">Facebook</button><button id="tPg" type="button">Page preview</button><button id="tPo" type="button">Poster</button></div>
+<span class="row"><button id="copyAll" type="button" hidden>Copy all</button><button id="copy" class="primary" type="button">Copy post</button></span>
+</div>
+<div id="status" class="status ok"></div>
+<textarea id="out" readonly aria-label="Generated post"></textarea>
+<div id="pageview" class="pv" hidden></div>
+<div id="poster" hidden>
+<div class="row" style="margin-bottom:10px"><button id="kVac" class="on" type="button">Vacancy poster</button><button id="kPromo" type="button">Other poster</button><button id="kRound" type="button">Roundup poster</button></div>
+<div class="row" id="rStyles" style="display:none;margin-bottom:10px"><button id="sDark" class="on" type="button">Closing soon</button><button id="sStory" type="button">Story list</button><button id="sDet" type="button">Detailed</button></div>
+<div class="row" id="lRow" style="margin-bottom:10px"><button id="lSide" class="on" type="button">Sidebar layout</button><button id="lFoot" type="button">Footer layout</button></div>
+<canvas id="pcv" width="1080" height="1350" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block"></canvas>
+<div class="row" style="margin-top:10px"><button id="pDl" class="primary" type="button">Download poster</button><button id="pDlAll" type="button" hidden>Download all</button></div>
+<p id="rNote" class="hint" hidden></p>
+<p class="hint">The poster is built from the same details as the post and updates as you type.</p>
+</div>
+<p class="hint">WhatsApp version uses *asterisks* for bold. Facebook version is plain text with hashtags.</p>
+</div>
+</section>
+</main>
+<section id="dash"><div id="dashBody"></div></section>
+<script>
+/* Android (Capacitor) bridge: saving/sharing files from the WebView */
+(function(){
+const C=window.Capacitor, native=!!(C&&C.isNativePlatform&&C.isNativePlatform());
+window.NATIVE_APP=native;
+if(!native)return;
+const P=C.Plugins||{};
+function b64FromBlob(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]);r.onerror=rej;r.readAsDataURL(b)})}
+function b64FromText(t){return btoa(unescape(encodeURIComponent(t)))}
+async function toCache(name,b64){const r=await P.Filesystem.writeFile({path:'export/'+name,data:b64,directory:'CACHE',recursive:true});return r.uri}
+window.nativeShareFiles=async function(files,title){
+ const uris=[];
+ for(const f of files){const d=f.blob?await b64FromBlob(f.blob):b64FromText(f.text);uris.push(await toCache(f.name,d))}
+ await P.Share.share({title:title||'WorkMw',dialogTitle:title||'Share or save',files:uris});
+};
+const blobs=new Map(), origCreate=URL.createObjectURL.bind(URL);
+URL.createObjectURL=function(o){const u=origCreate(o);if(o instanceof Blob)blobs.set(u,o);return u};
+const origClick=HTMLAnchorElement.prototype.click;
+HTMLAnchorElement.prototype.click=function(){
+ if(this.download&&blobs.has(this.href)){
+  const b=blobs.get(this.href), name=this.download;
+  window.nativeShareFiles([{name,blob:b}],name).catch(e=>{if(!/cancel/i.test(String(e&&e.message||e)))alert('Could not save file: '+(e&&e.message||e))});
+  return;
+ }
+ return origClick.apply(this,arguments);
+};
+})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const FIELDS=[
+['company','Company / organisation *','e.g. Jhpiego',1],
+['position','Position *','e.g. TB Technical Advisor',1],
+['location','Location *','Lilongwe, Malawi'],
+['project','Project (optional)','Name of the project, if any'],
+['profession','Profession / category','e.g. Health, Finance, Engineering'],
+['ref','Job reference','2026-8318'],
+['dept','Department',''],
+['reports','Reports to',''],
+['schedule','Work schedule','Hybrid, 2 days a week in the office'],
+['length','Programme length','24 months'],
+['payband','Pay band',''],
+['contract','Contract duration','Two (2) years'],
+['salary','Basic monthly salary','MWK 1,416,666.67'],
+['type','Job type','Full Time'],
+['posted','Date posted','','date'],
+['deadline','Application deadline *','','date'],
+['dtime','Deadline time (optional)','at 23:59 local time']
+];
+const OUT=[['location','LOCATION'],['project','PROJECT'],['position','POSITION'],['ref','JOB REFERENCE'],['dept','DEPARTMENT'],['reports','REPORTS TO'],['schedule','WORK SCHEDULE'],['length','PROGRAMME LENGTH'],['payband','PAY BAND'],['contract','CONTRACT DURATION'],['salary','BASIC MONTHLY SALARY'],['type','JOB TYPE'],['posted','DATE POSTED'],['deadline','APPLICATION DEADLINE']];
+const TEXT=['overview','resp','req','applyText','applyEmail','applyLink','applyNote'];
+const SET=['fb','wa','site','phone','email','tags'];
+let mode='wa';
+
+$('fields').innerHTML=FIELDS.map(([k,l,p,t])=>`<div><label for="f_${k}">${l}</label><input id="f_${k}" placeholder="${p||''}" ${t==='date'?'type="date"':''} autocomplete="off"></div>`).join('');
+
+const g=k=>($('f_'+k).value||'').trim();
+const tidy=s=>s.replace(/(\w)'(\w)/g,'$1\u2019$2');
+const ord=n=>{const m=n%100;if(m>=11&&m<=13)return n+'th';return n+(['th','st','nd','rd'][n%10]||'th')};
+function fmt(v){if(!v)return'';const d=new Date(v+'T00:00:00');if(isNaN(d))return v;
+return d.toLocaleDateString('en-GB',{weekday:'long'})+', '+ord(d.getDate())+' '+d.toLocaleDateString('en-GB',{month:'long'})+' '+d.getFullYear()}
+const items=t=>t.split('\n').map(l=>l.replace(/^\s*(\d+[.)]|[-\u2022*])\s*/,'').trim()).filter(Boolean);
+const paras=t=>t.split(/\n\s*\n/).map(p=>p.replace(/\s*\n\s*/g,' ').trim()).filter(Boolean).join('\n\n');
+const st=k=>($('s_'+k).value||'').trim();
+
+function deadline(){const d=fmt(g('deadline'));return d?d+(g('dtime')?', '+g('dtime'):''):''}
+
+function numbered(t,b){const out=[];let n=0;t.split('\n').forEach(r=>{const l=r.trim();if(!l)return;if(l.startsWith('## ')){if(out.length)out.push('');out.push(b(l.slice(3).trim()));n=0}else{n++;out.push(n+'. '+l.replace(/^\s*(\d+[.)]|[-\u2022*])\s*/,''))}});return out.join('\n')}
+function build(m){
+const b=t=>m==='wa'?`*${t}*`:t;
+const bl=(t,v)=>m==='wa'?`*${t}:* ${v}`:`${t}: ${v}`;
+const social=`Follow us on Facebook: ${st('fb')||'[FACEBOOK LINK]'}\nJoin our WhatsApp Group and Channel: ${st('wa')||'[WHATSAPP LINK]'}`;
+const dl=deadline();
+const val=k=>k==='position'?g(k).toUpperCase():k==='posted'?fmt(g(k)):k==='deadline'?dl:g(k);
+const blocks=[];
+blocks.push(b('VACANCY @ '+(g('company')||'COMPANY').toUpperCase()));
+blocks.push(OUT.filter(([k])=>val(k)).map(([k,l])=>{if(k==='position'&&g(k).includes('|')){const ps=g(k).split('|').map(x=>x.trim().toUpperCase()).filter(Boolean);return (m==='wa'?'*POSITIONS:*':'POSITIONS:')+'\n'+ps.map((x,i)=>`${i+1}. ${x}`).join('\n')}return bl(l,val(k))}).join('\n')||bl('POSITION','POSITION'));
+blocks.push(social);
+blocks.push('Browse more jobs on: '+(st('site')||'Workmw.com'));
+if(g('overview'))blocks.push(b('OVERVIEW')+'\n'+paras(g('overview')));
+if(g('resp'))blocks.push(b('KEY RESPONSIBILITIES')+'\n'+numbered(g('resp'),b));
+blocks.push(social);
+if(g('req'))blocks.push(b('KEY REQUIREMENTS')+'\n'+numbered(g('req'),b));
+const ap=[];
+if(g('applyText'))ap.push(paras(g('applyText')));
+const ln=[];
+if(g('applyEmail'))ln.push('Email: '+g('applyEmail'));
+if(g('applyLink'))ln.push('Apply online: '+g('applyLink'));
+if(ln.length)ap.push(ln.join('\n'));
+if(g('applyNote'))ap.push(paras(g('applyNote')));
+if(ap.length)blocks.push(b('HOW TO APPLY')+'\n'+ap.join('\n\n'));
+if(dl)blocks.push(bl('Closing date',dl));
+blocks.push(social);
+blocks.push(['Browse more jobs on: '+(st('site')||'Workmw.com'),'Advertise your jobs and business on WorkMw.',st('phone')?'WhatsApp: '+st('phone'):'',st('email')?'Email: '+st('email'):''].filter(Boolean).join('\n'));
+if(m==='fb'&&st('tags'))blocks.push(st('tags'));
+return tidy(blocks.join('\n\n'));
+}
+
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function pageHTML(){
+const co=g('company')||'Company',dl=g('deadline');
+const days=dl?Math.ceil((new Date(dl+'T00:00:00')-new Date().setHours(0,0,0,0))/864e5):null;
+const pills=[g('location')&&g('location').split(',')[0],g('type'),g('ref')&&'Ref '+g('ref'),days!==null&&(days<0?'Closed':days+' days left')].filter(Boolean);
+const row=(l,v)=>v?`<div class="lbl">${l}</div><div class="val">${esc(v)}</div>`:'';
+const ul=t=>{let h='',open=false;t.split('\n').forEach(r=>{const l=r.trim();if(!l)return;if(l.startsWith('## ')){if(open)h+='</ul>';open=false;h+=`<p style="margin-top:8px"><b>${esc(l.slice(3))}</b></p>`}else{if(!open){h+='<ul>';open=true}h+=`<li>${esc(l.replace(/^\s*(\d+[.)]|[-\u2022*])\s*/,''))}</li>`}});return h+(open?'</ul>':'')};
+const sec=(t,h)=>h?`<div class="box"><h4>${t}</h4>${h}</div>`:'';
+const ov=g('overview')?paras(g('overview')).split('\n\n').map(x=>`<p>${esc(x)}</p>`).join(''):'';
+const ap=[g('applyText')&&`<p>${esc(g('applyText'))}</p>`,g('applyEmail')&&`<p>Email: ${esc(g('applyEmail'))}</p>`,g('applyLink')&&`<p>Apply online: ${esc(g('applyLink'))}</p>`,g('applyNote')&&`<p>${esc(g('applyNote'))}</p>`].filter(Boolean).join('');
+const html=`<div class="ph"><div class="co"><span class="tile">${esc(co.slice(0,2))}</span>${esc(co)}</div><h3>${esc((g('position')||'Position title').replace(/\s*\|\s*/g,' \u00b7 '))}</h3>${pills.map(x=>`<span class="pill">${esc(x)}</span>`).join('')}</div>`
++sec('About the role',ov)+sec('Key responsibilities',g('resp')&&ul(g('resp')))+sec('Requirements',g('req')&&ul(g('req')))
++`<div class="box"><div class="lbl">Closing date</div><div class="big">${dl?new Date(dl+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'Not set'}</div><span class="btn">Apply on employer site</span>`
++row('Employer',co)+row('Location',g('location'))+row('Project',g('project'))+row('Employment type',g('type'))+row('Reports to',g('reports'))+row('Department',g('dept'))+row('Salary',g('salary'))+row('Vacancy reference',g('ref'))+`</div>`
++sec('How to apply',ap)
++`<div class="box safe"><h4>Stay safe</h4><p>Genuine employers never ask for a fee at any stage of recruitment. Apply only through the employer\u2019s official careers page.</p></div>`;
+return tidy(html);
+}
+function render(){
+vacs[cur]=readForm();renderTabs();
+if(mode==='page')$('pageview').innerHTML=pageHTML();else $('out').value=build(mode);
+$('out').hidden=mode==='page'||mode==='poster';$('pageview').hidden=mode!=='page';$('poster').hidden=mode!=='poster';$('copy').hidden=mode==='page'||mode==='poster';$('copyAll').hidden=mode==='page'||mode==='poster'||vacs.length<2;
+$('status').hidden=mode==='poster';document.body.dataset.pk=mode==='poster'&&pkind!=='vac'?pkind:'';if(mode==='poster'){drawPreview();$('pDlAll').hidden=vacs.length<2||pkind!=='vac'}
+const w=[];
+if(!g('company'))w.push('Company name is missing');
+if(!g('position'))w.push('Position is missing');
+if(!g('deadline'))w.push('Application deadline is missing');
+if(!g('applyText')&&!g('applyEmail')&&!g('applyLink'))w.push('No way to apply is given');
+if(!st('fb'))w.push('Facebook link not set, so [FACEBOOK LINK] stays in the post');
+if(!st('wa'))w.push('WhatsApp link not set, so [WHATSAPP LINK] stays in the post');
+const s=$('status');
+s.className='status '+(w.length?'warn':'ok');
+s.innerHTML=w.length?'Before you post:<ul>'+w.map(x=>`<li>${x}</li>`).join('')+'</ul>':'Ready to post.';
+}
+
+function saveSettings(){try{localStorage.setItem('workmw_settings',JSON.stringify(Object.fromEntries(SET.map(k=>[k,$('s_'+k).value]))))}catch(e){}}
+function loadSettings(){try{const o=JSON.parse(localStorage.getItem('workmw_settings')||'null');if(o)SET.forEach(k=>{if(typeof o[k]==='string')$('s_'+k).value=o[k]})}catch(e){}}
+loadSettings();
+if(!st('fb')||!st('wa'))$('settings').open=true;
+
+const root=document.documentElement,mq=window.matchMedia('(prefers-color-scheme: dark)');
+const curTheme=()=>root.dataset.theme||(mq.matches?'dark':'light');
+const paintTheme=()=>{$('theme').setAttribute('aria-checked',curTheme()==='dark'?'true':'false')};
+try{const t=localStorage.getItem('workmw_theme');if(t==='dark'||t==='light')root.dataset.theme=t}catch(e){}
+$('theme').onclick=()=>{const n=curTheme()==='dark'?'light':'dark';root.dataset.theme=n;try{localStorage.setItem('workmw_theme',n)}catch(e){}paintTheme()};
+if(mq.addEventListener)mq.addEventListener('change',paintTheme);
+paintTheme();
+
+document.querySelectorAll('#editPane input,#editPane textarea').forEach(el=>el.addEventListener('input',()=>{if(el.id.startsWith('s_'))saveSettings();render()}));
+
+function setMode(m){mode=m;$('tWa').classList.toggle('on',m==='wa');$('tFb').classList.toggle('on',m==='fb');$('tPg').classList.toggle('on',m==='page');$('tPo').classList.toggle('on',m==='poster');render()}
+$('tWa').onclick=()=>setMode('wa');$('tFb').onclick=()=>setMode('fb');$('tPg').onclick=()=>setMode('page');$('tPo').onclick=()=>setMode('poster');
+function setView(v){document.body.dataset.view=v;$('vEdit').classList.toggle('on',v==='edit');$('vPost').classList.toggle('on',v==='post');window.scrollTo(0,0)}
+$('vEdit').onclick=()=>setView('edit');$('vPost').onclick=()=>setView('post');
+
+async function copyText(t,btn,label,list){
+let ok=false;
+try{await navigator.clipboard.writeText(t);ok=true}catch(e){}
+if(!ok){try{const prev=$('out').value;$('out').value=t;$('out').select();ok=document.execCommand('copy');$('out').value=prev}catch(e){}}
+btn.textContent=ok?'Copied!':'Select text and copy';
+if(ok&&list&&list.length)track(list,mode==='fb'?'fb':'wa').then(n=>{if(n)btn.textContent='Copied and logged'});
+setTimeout(()=>btn.textContent=label,1800);
+}
+$('copy').onclick=()=>copyText($('out').value,$('copy'),'Copy post',[readForm()]);
+$('copyAll').onclick=()=>{const keep=readForm();const t=vacs.map(v=>{writeForm(v);return build(mode)}).join('\n\n--------------------------------------------\n\n');writeForm(keep);vacs[cur]=keep;copyText(t,$('copyAll'),'Copy all',vacs.slice())};
+
+function fill(o){FIELDS.forEach(([k])=>$('f_'+k).value=o[k]||'');TEXT.forEach(k=>$('f_'+k).value=o[k]||'');render()}
+const vacs=[{}];let cur=0;
+const readForm=()=>{const o={};KEYS.forEach(k=>o[k]=$('f_'+k).value);return o};
+const writeForm=o=>KEYS.forEach(k=>$('f_'+k).value=(o&&o[k])||'');
+function renderTabs(){document.querySelectorAll('.vt').forEach(el=>{el.style.display=vacs.length>1?'flex':'none';el.innerHTML='';
+vacs.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className=i===cur?'on':'';b.textContent=(i+1)+'. '+(((v.position||v.company||'New')+'').split('|')[0].trim().slice(0,22));b.onclick=()=>switchTo(i);el.appendChild(b)});
+const r=document.createElement('button');r.type='button';r.textContent='Remove';r.onclick=removeCur;el.appendChild(r)})}
+function switchTo(i){vacs[cur]=readForm();cur=i;writeForm(vacs[i]);render()}
+function removeCur(){vacs.splice(cur,1);cur=Math.min(cur,vacs.length-1);writeForm(vacs[cur]);render()}
+function numberBoxes(){document.querySelectorAll('.rawbox').forEach((w,i)=>{w.querySelector('label').textContent='Advert '+(i+1)})}
+function addBox(){const w=document.createElement('div');w.className='rawbox';w.innerHTML='<label></label><textarea class="raw" rows="5" placeholder="Copy a vacancy from anywhere and paste it here"></textarea>';$('raws').appendChild(w);numberBoxes();return w}
+addBox();
+$('addBox').onclick=()=>addBox().querySelector('textarea').focus();
+$('clear').onclick=()=>{vacs.length=0;vacs.push({});cur=0;document.querySelectorAll('.rawbox').forEach((w,i)=>{if(i)w.remove();else w.querySelector('textarea').value=''});fill({});$('autoMsg').textContent='One advert per box. Empty boxes are skipped.'};
+
+const KEYS=[...FIELDS.map(f=>f[0]),...TEXT];
+const MON=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+function iso(s){const m=s&&s.match(/(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?([A-Za-z]{3,9})\.?,?\s+(\d{4})/);if(!m)return'';const i=MON.indexOf(m[2].toLowerCase().slice(0,3));return i<0?'':`${m[3]}-${String(i+1).padStart(2,'0')}-${String(+m[1]).padStart(2,'0')}`}
+function clean(o){const r={};KEYS.forEach(k=>{let v=o[k];if(Array.isArray(v))v=v.map(x=>String(x).trim()).filter(Boolean).join('\n');r[k]=(v==null?'':String(v)).trim()});['posted','deadline'].forEach(k=>{if(!/^\d{4}-\d\d-\d\d$/.test(r[k]))r[k]=''});FIELDS.forEach(f=>{if(/^(not (specified|stated)|n\/a|none)\b/i.test(r[f[0]]))r[f[0]]=''});return r}
+
+async function aiParse(t){
+if(typeof claude==='undefined')throw 0;
+const sample=await claude.use('sample');if(!sample)throw 0;
+const prompt=['You extract job adverts into JSON for a Malawi jobs channel. Return ONLY a JSON object with these string keys: '+KEYS.join(', ')+'.',
+'Rules:',
+'- Use "" when the advert does not say it, or says it is not specified. Never invent facts.',
+'- posted and deadline must be YYYY-MM-DD (assume 2026 if the year is missing). dtime only if a closing time is given, e.g. "at 23:59 local time".',
+'- company is the employer only, never words like "multiple vacancies announcement". location is the work location. project is the project name if the advert names one.',
+'- position is the job title only. If the advert has several positions, join the titles with " | " and keep the number of posts in each title, e.g. "Soil Laboratory Technician (2 positions) | Bitumen Laboratory Technician (1 position)".',
+'- overview = 1 to 3 short paragraphs about the employer and the work, separated by a blank line.',
+'- resp and req = one item per line, no numbering, original wording trimmed to the essentials. Merge qualifications, experience, skills and competencies into req.',
+'- If there are several positions with different duties or requirements, start each position block in resp and in req with a line "## Position title" followed by the items for that position. A single position needs no ## lines.',
+'- profession = one broad category: Health, Finance & Accounting, Engineering & Construction, Legal, Education & Research, Agriculture & Environment, Logistics & Transport, IT & Telecoms, Sales & Marketing, Administration, Management, NGO & Development, Hospitality, or Other.',
+'- applyText = how to submit: documents needed and any postal or hand-delivery address, without the email or link. applyEmail = all application emails separated by " or ". applyLink = the application URL only if applying online.',
+'- Ignore promotional lines from other job sites or channels (follow our channel, browse more jobs). Never use their links as applyLink.',
+'- applyNote = extra notices such as only shortlisted candidates will be contacted, or warnings about fees or scams.',
+'','ADVERT:',t].join('\n');
+return clean(await sample.json(prompt,{modelTier:'default'}));
+}
+
+function local(t){
+const L=t.replace(/\r/g,'').split('\n').map(s=>s.trim());
+const H={overview:/^(about|overview|background|job summary|job purpose|role purpose|summary|purpose|introduction)\b/i,resp:/^(key |main )?(responsibilit|duties)/i,req:/^(key |minimum |essential )?(requirement|qualification|person specification)/i,apply:/^(how to apply|application procedure|to apply)/i};
+const sec={top:[]};let cur='top';
+L.forEach(l=>{const h=l.replace(/[:*#_]/g,'').trim();const k=h&&h.length<45&&Object.keys(H).find(k=>H[k].test(h));if(k){cur=k;sec[k]=sec[k]||[]}else sec[cur].push(l)});
+const lab=re=>{for(const l of L){const m=l.replace(/[*_]/g,'').match(new RegExp('^(?:'+re+')\\s*[:\\-\u2013]\\s*(.+)','i'));if(m)return m[1].trim()}return''};
+const apl=(sec.apply||[]).filter(l=>!/follow|browse|channel|join/i.test(l));const asrc=apl.length?apl.join('\n'):t;const email=[...new Set(asrc.match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g)||[])].join(' or ');
+const link=((apl.join(' ').match(/https?:\/\/\S+/)||[''])[0]).replace(/[).,;]+$/,'');const at=(sec.top.find(Boolean)||'').match(/@\s*(.+)$/);
+const dl=L.find(l=>/closing date|deadline|closes|close on/i.test(l)&&iso(l));
+const NOTE=/fee|charge|scam|shortlist|will be contacted/i;const first=(sec.top.find(Boolean)||'').replace(/\s*@.*$/,'').replace(/^(multiple )?vacanc(y|ies)( announcement)?\s*[:@-]?\s*/i,'');
+return{company:lab('company|organi[sz]ation|employer')||(at?at[1].trim():''),project:lab('project'),profession:guessProf(lab('position|job title|title')||first,[...sec.top,...(sec.overview||[])].join(' ')),position:lab('position|job title|title')||first,location:lab('location|duty station'),ref:lab('job ref\\w*|reference(?: number| no\\.?)?|ref(?: no\\.?)?'),dept:lab('department'),reports:lab('reports? to'),type:lab('job type|employment type|contract type'),salary:lab('(?:basic )?(?:monthly )?salary'),schedule:lab('work schedule'),length:lab('programme length|duration'),posted:iso(L.find(l=>/date posted|posted on/i.test(l))||''),deadline:dl?iso(dl):'',overview:[sec.top.filter(l=>l.length>60&&!/@/.test(l)&&!/follow|browse|channel|https?:/i.test(l)&&!/^[\w ]{2,28}:\s/.test(l)).join('\n\n'),(sec.overview||[]).filter(l=>!/^[\w ]{2,28}:\s/.test(l)).join('\n')].filter(Boolean).join('\n\n'),resp:items((sec.resp||[]).filter(l=>!/:$/.test(l)).join('\n')),req:items((sec.req||[]).filter(l=>!/:$/.test(l)).join('\n')),applyText:apl.filter(l=>l.length>25&&!/@|https?:/.test(l)&&!/^email\s*:|^apply online/i.test(l)&&!NOTE.test(l)).slice(0,2).join(' '),applyNote:apl.filter(l=>NOTE.test(l)).join(' '),applyEmail:email,applyLink:link};
+}
+
+$('auto').onclick=async()=>{
+const texts=[...document.querySelectorAll('.raw')].map(x=>x.value.trim()).filter(t=>t.length>=40),m=$('autoMsg'),btn=$('auto');
+if(!texts.length){m.textContent='Paste at least one full advert first.';return}
+btn.disabled=true;let useAI=true;const out=[],hows=new Set();
+for(let i=0;i<texts.length;i++){
+m.textContent='Reading advert '+(i+1)+' of '+texts.length+'...';
+let o=null;
+if(useAI){try{o=await aiParse(texts[i]);hows.add('Claude')}catch(e){o=null;if(e===0||(e&&e.code==='not_granted'))useAI=false}}
+if(!o){o=clean(local(texts[i]));hows.add('the basic reader')}
+out.push(o);
+}
+vacs.length=0;out.forEach(o=>vacs.push(o));cur=0;writeForm(vacs[0]);render();
+m.textContent='Filled '+out.length+(out.length>1?' vacancies':' vacancy')+' using '+[...hows].join(' and ')+'. '+(out.length>1?'Check each one with the numbered tabs, then open Copy post or Poster.':'Check the fields below, then open Copy post or Poster.');
+btn.disabled=false;
+};
+$('sample').onclick=()=>fill({company:'NBS Bank',position:'Legal Manager',location:'Blantyre, Malawi (Head Office)',dept:'Legal Department',reports:'Head of Legal Services and Loan Recoveries',type:'Full Time',deadline:'2026-11-13',
+overview:'NBS Bank invites applications from suitably qualified and experienced candidates for the position of Legal Manager.\n\nThe Legal Manager manages the Bank\u2019s legal risks and ensures compliance with applicable laws.',
+resp:'Provide legal advice and opinions to business units and management\nDraft, review and vet loan documentation and contracts\nManage litigation, debt recovery and enforcement',
+req:'Bachelor of Laws degree from a recognised institution\nAdmission to practise law in Malawi with a valid practising licence\nAt least 7 years of relevant legal experience',
+applyText:'Send your application, updated CV, three traceable referees and copies of your certificates by email:',applyEmail:'recruitment@nbs.mw',applyNote:'Only shortlisted candidates will be contacted.'});
+const MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const PROFS=[['Logistics & Transport',/driver|logistic|transport|fleet|warehouse|supply chain|procurement/i],['Legal',/legal|lawyer|counsel|compliance|advocate/i],['Finance & Accounting',/account|financ|audit|bank|treasur|credit|loan|insurance|payroll/i],['Health',/nurs|clinic|health|medical|doctor|pharmac|midwi|hospital|\bTB\b|\bHIV\b/i],['Engineering & Construction',/engineer|construction|technician|surveyor|civil|mechanic|electric|architect|foreman|artisan/i],['Education & Research',/teach|lectur|tutor|research|academic|school|trainer/i],['IT & Telecoms',/software|developer|\bIT\b|\bICT\b|network|data analyst|system|programmer/i],['Sales & Marketing',/sales|marketing|customer|brand|communication|public relations/i],['Agriculture & Environment',/agri|farm|wildlife|environment|conservation|forest|climate/i],['Hospitality',/hotel|chef|cook|waiter|lodge|restaurant|hospitality/i],['Management',/manager|director|head of|chief|trainee|coordinator|supervisor/i],['NGO & Development',/programme|program|project|monitoring|evaluation|field officer|community/i],['Administration',/admin|secretar|clerk|receptionist|assistant|officer/i]];
+function guessProf(pos,ov){for(const t of [pos||'',ov||'']){for(const [n,re] of PROFS)if(re.test(t))return n}return 'Other'}
+const nice=s=>{s=(s||'').trim().replace(/\s+/g,' ');return s===s.toUpperCase()&&/[A-Z]/.test(s)?s.toLowerCase().replace(/\b[a-z]/g,c=>c.toUpperCase()):s};
+const titlesOf=p=>(p||'').split('|').map(x=>nice(x.replace(/\(\s*\d+\s*positions?\s*\)/i,'')).trim()).filter(Boolean);
+const mname=m=>m==='fb'?'Facebook':'WhatsApp';
+const slug=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const fmtD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+const store={recs:[],mode:'local',db:null};
+const persist=()=>{try{localStorage.setItem('workmw_shares',JSON.stringify(store.recs))}catch(e){}};
+async function initStore(){
+try{
+const db=typeof claude!=='undefined'?await claude.use('db'):null;
+if(db){store.db=db.collection('shares');store.mode='cloud';
+await new Promise(res=>{const t=setTimeout(res,10000);
+store.db.onSnapshot(snap=>{store.recs=snap.docs.map(d=>Object.assign({},d.data(),{id:d.id}));clearTimeout(t);res();renderDash()},e=>{clearTimeout(t);store.mode='local';res()})})}
+}catch(e){store.mode='local'}
+if(store.mode==='local'){try{store.recs=JSON.parse(localStorage.getItem('workmw_shares')||'[]')}catch(e){store.recs=[]}}
+renderDash();
+}
+async function track(list,method){
+let n=0;
+for(const v of list){
+if(!v||!(v.company||v.position))continue;
+const id=(method+'_'+slug([v.company,v.position,v.ref,v.deadline].join(' '))).slice(0,150);
+if(store.recs.some(r=>r.id===id))continue;
+const r={id,method,ts:new Date().toISOString(),company:(v.company||'').trim(),position:(v.position||'').trim(),profession:(v.profession||'').trim()||guessProf(v.position,v.overview),location:(v.location||'').trim(),type:(v.type||'').trim(),salary:(v.salary||'').trim(),ref:(v.ref||'').trim(),deadline:v.deadline||'',req:(v.req||'').slice(0,1200)};
+store.recs.push(r);
+try{if(store.mode==='cloud')await store.db.doc(id).set(r);else persist();n++}catch(e){store.recs.pop()}
+}
+renderDash();return n;
+}
+async function removeRec(id){
+store.recs=store.recs.filter(r=>r.id!==id);
+try{if(store.mode==='cloud')await store.db.doc(id).delete();else persist()}catch(e){}
+}
+
+const dash={range:'all',trend:'day'};
+const vkOf=r=>r.id.slice(r.method.length+1);
+const uniq=a=>{const s=new Set();return a.filter(r=>{const k=vkOf(r);if(s.has(k))return false;s.add(k);return true})};
+function inRange(r){const t=new Date(r.ts),s=new Date();s.setHours(0,0,0,0);
+if(dash.range==='all')return true;if(dash.range==='7d')s.setDate(s.getDate()-6);else if(dash.range==='30d')s.setDate(s.getDate()-29);else if(dash.range==='year')s.setMonth(0,1);return t>=s}
+function bk(d,t){if(t==='day')return fmtD(d);if(t==='week'){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return fmtD(x)}if(t==='month')return fmtD(d).slice(0,7);return String(d.getFullYear())}
+function buckets(t){const n={day:14,week:12,month:12,year:5}[t],out=[],td=new Date();td.setHours(0,0,0,0);
+for(let i=n-1;i>=0;i--){let d;if(t==='day'){d=new Date(td);d.setDate(d.getDate()-i)}else if(t==='week'){d=new Date(td);d.setDate(d.getDate()-7*i)}else if(t==='month')d=new Date(td.getFullYear(),td.getMonth()-i,1);else d=new Date(td.getFullYear()-i,0,1);
+const k=bk(d,t);if(!out.includes(k))out.push(k)}return out}
+const blabel=(k,t)=>t==='day'?k.slice(8):t==='week'?k.slice(8)+'/'+k.slice(5,7):t==='month'?MONS[+k.slice(5)-1]:k;
+const tally=a=>{const m=new Map();a.forEach(k=>m.set(k,(m.get(k)||0)+1));return [...m].sort((x,y)=>y[1]-x[1]).slice(0,8)};
+const rk=rows=>{const mx=rows.length?rows[0][1]:1;return rows.map(([k,n])=>`<div class="rk"><span>${esc(k)}</span><b>${n}</b><i><u style="width:${n/mx*100}%"></u></i></div>`).join('')||'<p class="hint">No data in this range.</p>'};
+const lv=t=>{const r=[];if(/ph\.?d|doctorate/i.test(t))r.push('PhD');if(/master|msc|mba/i.test(t))r.push('Master\u2019s');if(/bachelor|degree|b\.?sc|bcom/i.test(t))r.push('Degree');if(/diploma/i.test(t))r.push('Diploma');if(/certificate|msce|jce/i.test(t))r.push('Certificate / MSCE');return r};
+const btns=(attr,opts,cur)=>opts.map(([v,l])=>`<button type="button" data-${attr}="${v}" class="${v===cur?'on':''}">${l}</button>`).join('');
+
+function renderDash(){
+const el=$('dashBody');if(!el)return;
+const note=store.mode==='cloud'?'Saved to your account, so it is the same on every device.':'Saved on this device only.';
+const all=store.recs.slice();
+if(!all.length){el.innerHTML=`<div class="card"><h2>Nothing shared yet</h2><p class="hint">Each time you tap Copy post or Copy all on the Generator, the vacancy is logged here by method (WhatsApp or Facebook). ${note}</p></div>`;return}
+const now=new Date(),sod=new Date(now);sod.setHours(0,0,0,0);
+const wk=new Date(sod);wk.setDate(wk.getDate()-((sod.getDay()+6)%7));
+const since=d=>all.filter(r=>new Date(r.ts)>=d).length;
+const R=all.filter(inRange),V=uniq(R),VA=uniq(all);
+const wa=R.filter(r=>r.method!=='fb').length,fb=R.length-wa;
+const stat=(n,l)=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`;
+const keys=buckets(dash.trend),cnt={};
+all.forEach(r=>{const k=bk(new Date(r.ts),dash.trend);(cnt[k]=cnt[k]||{wa:0,fb:0})[r.method==='fb'?'fb':'wa']++});
+const mx=Math.max(1,...keys.map(k=>cnt[k]?cnt[k].wa+cnt[k].fb:0));
+const chart=keys.map(k=>{const c=cnt[k]||{wa:0,fb:0},t=c.wa+c.fb;return `<div title="${blabel(k,dash.trend)}: ${c.wa} WhatsApp, ${c.fb} Facebook"><small>${t||''}</small><span class="bar" style="height:${t/mx*76}%"><i class="w" style="height:${t?c.wa/t*100:0}%"></i><i class="f" style="height:${t?c.fb/t*100:0}%"></i></span><small>${blabel(k,dash.trend)}</small></div>`}).join('');
+const byCo=new Map();VA.forEach(r=>{const k=nice(r.company).toLowerCase();if(!byCo.has(k))byCo.set(k,[]);byCo.get(k).push(r)});
+const cos=[...byCo.values()].sort((a,b)=>b.length-a.length).slice(0,25).map(G=>{
+const name=nice(G[0].company)||'Unknown',sal=[...new Set(G.map(r=>r.salary).filter(Boolean))],yrs=new Set(),lc=new Map();
+G.forEach(r=>{const t=r.req||'';lv(t).forEach(x=>lc.set(x,(lc.get(x)||0)+1));(t.match(/(\d+)\s*(?:\+\s*)?(?:\(\d+\)\s*)?years?/gi)||[]).forEach(m=>yrs.add(+m.match(/\d+/)[0]))});
+const rows=G.map(r=>`<div class="rr"><span>${esc(titlesOf(r.position).join(' / ')||'Untitled')}<br><small>${esc(r.profession||'')}${r.location?' \u00b7 '+esc(r.location):''}${r.type?' \u00b7 '+esc(r.type):''}</small></span><span>${r.deadline?'Closes '+esc(r.deadline):''}${r.salary?'<br>'+esc(r.salary):''}</span></div>`).join('');
+const facts=[lc.size?'Qualifications asked: '+[...lc].map(([k,n])=>k+' ('+n+')').join(', '):'',yrs.size?'Experience asked: '+[...yrs].sort((a,b)=>a-b).join(', ')+' years':'',sal.length?'Salaries seen: '+sal.map(esc).join('; '):'Salaries seen: none stated'].filter(Boolean).map(x=>`<p class="hint">${x}</p>`).join('');
+return `<details><summary><b>${esc(name)}</b> \u00b7 ${G.length} vacanc${G.length>1?'ies':'y'}</summary>${rows}${facts}</details>`}).join('');
+const recent=all.sort((a,b)=>b.ts<a.ts?-1:1).slice(0,15).map(r=>`<div class="rr"><span>${new Date(r.ts).toLocaleDateString('en-GB',{day:'numeric',month:'short'})} \u00b7 ${mname(r.method)} \u00b7 <b>${esc(nice(r.company))}</b><br><small>${esc(titlesOf(r.position).join(' / '))}</small></span><button type="button" class="x" data-del="${esc(r.id)}" aria-label="Delete this entry">\u00d7</button></div>`).join('');
+el.innerHTML=
+`<div class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Overview</h2><div class="row">${btns('r',[['today','Today'],['7d','7 days'],['30d','30 days'],['year','This year'],['all','All time']],dash.range)}</div></div>
+<div class="dg" style="margin-top:14px">${stat(R.length,'Shares')}${stat(V.length,'Vacancies')}${stat(wa,'WhatsApp')}${stat(fb,'Facebook')}${stat(new Set(R.map(r=>nice(r.company).toLowerCase())).size,'Companies')}</div>
+<div class="dg" style="margin-top:12px">${stat(since(sod),'Shared today')}${stat(since(wk),'This week')}${stat(since(new Date(now.getFullYear(),now.getMonth(),1)),'This month')}${stat(since(new Date(now.getFullYear(),0,1)),'This year')}</div></div>
+<div class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Shares over time</h2><div class="row">${btns('t',[['day','Daily'],['week','Weekly'],['month','Monthly'],['year','Yearly']],dash.trend)}</div></div>
+<div class="chart">${chart}</div><p class="hint"><span class="dot w"></span> WhatsApp &nbsp; <span class="dot f"></span> Facebook</p></div>
+<div class="cols"><div class="card"><h2>By profession</h2>${rk(tally(V.map(r=>r.profession||'Other')))}</div><div class="card"><h2>By company</h2>${rk(tally(V.map(r=>nice(r.company)||'Unknown')))}</div><div class="card"><h2>By job title</h2>${rk(tally(V.flatMap(r=>titlesOf(r.position))))}</div></div>
+<div class="card" style="margin-top:16px"><h2>Company insights</h2>${cos}<p class="hint">Built from the vacancies you shared: salaries, qualification levels and years of experience each company asked for.</p></div>
+<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Recent shares</h2><button type="button" data-export="1">Export CSV</button></div>${recent}<p class="hint">Counted when you tap Copy post or Copy all. A vacancy counts once per method. ${note}</p></div>`;
+}
+$('dashBody').addEventListener('click',async e=>{
+const b=e.target.closest('button');if(!b)return;
+if(b.dataset.r)dash.range=b.dataset.r;
+else if(b.dataset.t)dash.trend=b.dataset.t;
+else if(b.dataset.del)await removeRec(b.dataset.del);
+else if(b.dataset.export){
+const cols=['ts','method','company','position','profession','location','type','salary','ref','deadline','req'];
+const csv=[cols.join(',')].concat(store.recs.map(r=>cols.map(c=>'"'+String(c==='method'?mname(r.method):(r[c]||'')).replace(/"/g,'""').replace(/\n/g,' | ')+'"').join(','))).join('\n');
+try{if(window.NATIVE_APP){await window.nativeShareFiles([{name:'workmw-shares.csv',text:csv}],'workmw-shares.csv');b.textContent='Saved'}else{const d=await claude.use('downloads');if(!d)throw 0;await d.save({filename:'workmw-shares.csv',data:csv});b.textContent='Saved'}}catch(x){b.textContent='Download not available here'}
+setTimeout(()=>b.textContent='Export CSV',2200);return}
+renderDash();
+});
+function setPage(p){document.body.dataset.page=p;$('navGen').classList.toggle('on',p==='gen');$('navDash').classList.toggle('on',p==='dash');
+$('heroH').textContent=p==='dash'?'Your vacancy dashboard':'Create vacancy posts in seconds';
+$('heroP').textContent=p==='dash'?'See what you have shared, where, and which companies and professions are hiring.':'Paste an advert, check the details, then copy it for WhatsApp or Facebook.';
+if(p==='dash')renderDash();window.scrollTo(0,0)}
+$('navGen').onclick=()=>setPage('gen');$('navDash').onclick=()=>setPage('dash');
+
+/* ===== POSTER ===== */
+const PW=1080,PH=1350,FONT='"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';
+let plLayout='side';
+const fnt=(w,s)=>`${w} ${s}px ${FONT}`;
+function pRR(c,x,y,w,h,r){const [a,b,d,e]=Array.isArray(r)?r:[r,r,r,r];c.beginPath();c.moveTo(x+a,y);c.lineTo(x+w-b,y);c.arcTo(x+w,y,x+w,y+b,b);c.lineTo(x+w,y+h-d);c.arcTo(x+w,y+h,x+w-d,y+h,d);c.lineTo(x+e,y+h);c.arcTo(x,y+h,x,y+h-e,e);c.lineTo(x,y+a);c.arcTo(x,y,x+a,y,a);c.closePath()}
+function pT(c,s,x,y,font,col,o){o=o||{};c.font=font;c.fillStyle=col;c.textAlign=o.align||'left';c.textBaseline='alphabetic';if('letterSpacing' in c)c.letterSpacing=(o.ls||0)+'px';c.fillText(s,x,y);if('letterSpacing' in c)c.letterSpacing='0px'}
+function pFit(c,s,maxW,wt,start,min){let z=start;for(;z>min;z-=1){c.font=fnt(wt,z);if(c.measureText(s).width<=maxW)break}return z}
+function pWrap(c,words,maxW,sp){const lines=[];let cur=[],w=0;words.forEach(o=>{c.font=fnt(o.b?800:500,sp);const ww=c.measureText(o.w).width,sw=c.measureText(' ').width;if(cur.length&&w+sw+ww>maxW){lines.push(cur);cur=[o];w=ww}else{w+=(cur.length?sw:0)+ww;cur.push(o)}});if(cur.length)lines.push(cur);return lines}
+function pLines(c,s,maxW,wt,sz){c.font=fnt(wt,sz);const out=[];let cur='';s.split(/\s+/).filter(Boolean).forEach(w=>{const t=cur?cur+' '+w:w;if(cur&&c.measureText(t).width>maxW){out.push(cur);cur=w}else cur=t});if(cur)out.push(cur);return out}
+function pIcon(c,t,cx,cy,r,bg,fg){fg=fg||'#fff';c.fillStyle=bg;c.beginPath();c.arc(cx,cy,r,0,7);c.fill();c.strokeStyle=fg;c.fillStyle=fg;c.lineWidth=2.6*Math.max(1,r/25);c.lineCap='round';c.lineJoin='round';const k=r/25;
+if(t==='fb'){pT(c,'f',cx+1*k,cy+10*k,fnt(800,30*k),fg,{align:'center'})}
+else if(t==='wa'){c.beginPath();c.arc(cx,cy-1*k,11*k,0,7);c.stroke();c.beginPath();c.moveTo(cx-9*k,cy+8*k);c.lineTo(cx-12*k,cy+14*k);c.lineTo(cx-5*k,cy+11*k);c.stroke();c.beginPath();c.arc(cx,cy-1*k,3.2*k,0,7);c.fill()}
+else if(t==='grp'){c.beginPath();c.arc(cx-5*k,cy-6*k,5*k,0,7);c.stroke();c.beginPath();c.arc(cx-5*k,cy+10*k,9*k,Math.PI*1.1,Math.PI*1.9);c.stroke();c.beginPath();c.arc(cx+8*k,cy-4*k,4*k,0,7);c.stroke();c.beginPath();c.arc(cx+8*k,cy+9*k,7*k,Math.PI*1.15,Math.PI*1.85);c.stroke()}
+else if(t==='mail'){pRR(c,cx-12*k,cy-8.5*k,24*k,17*k,3*k);c.stroke();c.beginPath();c.moveTo(cx-11*k,cy-7*k);c.lineTo(cx,cy+2*k);c.lineTo(cx+11*k,cy-7*k);c.stroke()}
+else if(t==='web'){c.beginPath();c.arc(cx,cy,11*k,0,7);c.stroke();c.beginPath();c.ellipse(cx,cy,5*k,11*k,0,0,7);c.stroke();c.beginPath();c.moveTo(cx-11*k,cy);c.lineTo(cx+11*k,cy);c.stroke()}
+else if(t==='pin'){c.beginPath();c.arc(cx,cy-3*k,8*k,Math.PI*.8,Math.PI*.2);c.lineTo(cx,cy+12*k);c.closePath();c.stroke();c.beginPath();c.arc(cx,cy-3*k,3*k,0,7);c.fill()}
+else if(t==='doc'){pRR(c,cx-7*k,cy-9*k,14*k,18*k,2*k);c.stroke();c.beginPath();c.moveTo(cx-3*k,cy-1*k);c.lineTo(cx+3*k,cy-1*k);c.moveTo(cx-3*k,cy+4*k);c.lineTo(cx+3*k,cy+4*k);c.stroke()}
+else if(t==='case'){pRR(c,cx-10*k,cy-5*k,20*k,14*k,3*k);c.stroke();c.beginPath();c.moveTo(cx-4*k,cy-5*k);c.lineTo(cx-4*k,cy-9*k);c.lineTo(cx+4*k,cy-9*k);c.lineTo(cx+4*k,cy-5*k);c.stroke()}
+else if(t==='bldg'){pRR(c,cx-7*k,cy-10*k,14*k,20*k,2*k);c.stroke();c.beginPath();c.moveTo(cx-3*k,cy-4*k);c.lineTo(cx+3*k,cy-4*k);c.moveTo(cx-3*k,cy+1*k);c.lineTo(cx+3*k,cy+1*k);c.stroke()}}
+function pData(v){
+const t=s=>(s||'').trim(),ttl=(v.position||'').split('|').map(x=>x.trim().toUpperCase()).filter(Boolean);
+const reqs=(v.req||'').split('\n').filter(l=>l.trim()&&!l.trim().startsWith('## '));
+const its=items(reqs.join('\n')).slice(0,5).map(s=>{s=s.replace(/[.;]\s*$/,'');if(s.length>100){s=s.slice(0,100);s=s.slice(0,s.lastIndexOf(' '))+'…'}const w=s.split(/\s+/);const nb=Math.min(2,Math.max(1,w.length-1));return w.map((x,i)=>({w:x,b:i<nb}))});
+let dl='TO BE ANNOUNCED';if(/^\d{4}-\d\d-\d\d$/.test(v.deadline||'')){const p=v.deadline.split('-');dl=(+p[2])+' '+MONS[+p[1]-1].toUpperCase()+' '+p[0]}
+let apply='';if(t(v.applyLink)){try{apply=new URL(v.applyLink).host.replace(/^www\./,'')}catch(e){apply=t(v.applyLink)}}else if(t(v.applyEmail))apply=t(v.applyEmail).split(/\s+or\s+/)[0];
+let note=t(v.applyNote).split(/(?<=[.!?])\s+/)[0]||'';if(note.length>70)note=note.slice(0,70).replace(/\s\S*$/,'')+'…';
+const loc=t(v.location);
+return{co:t(v.company)||'Company',title:ttl.join('  ·  ')||'POSITION TITLE',pills:[t(v.type),t(v.payband)||(v.ref?'Ref '+t(v.ref):''),loc].filter(Boolean),sub:[t(v.dept)||t(v.project),loc&&loc.split(',')[0]].filter(Boolean),its,dl,apply,note}}
+function pReqs(c,P,x,y,w,h,sz0,min,head){
+pRR(c,x,y,w,h,34);c.fillStyle='#fff';c.fill();c.strokeStyle='#e3e8f3';c.lineWidth=2;c.stroke();
+const pad=28,ix=x+pad,iw=w-pad*2;pRR(c,ix,y+24,40,40,12);c.fillStyle='#0d0d0d';c.fill();pIcon(c,'doc',ix+20,y+44,20,'#0d0d0d');
+pT(c,head||'REQUIREMENTS',ix+56,y+53,fnt(800,sz0>=30?32:sz0>=24?28:24),'#0d0d0d',{ls:4});
+c.fillStyle='#1440f0';c.fillRect(ix,y+78,iw,3);
+const top=y+92,avail=h-92-16;let L=null,sz=sz0,its=P.its.slice();
+const lay=n=>{const tw=iw-50,ls=its.slice(0,n).map(o=>pWrap(c,o,tw,sz));const lh=Math.round(sz*1.32);return{ls,lh,tot:ls.reduce((a,l)=>a+l.length*lh+22,0)}};
+let n=its.length;
+for(;n>=Math.min(4,its.length);n--){for(sz=sz0;sz>=min;sz--){L=lay(n);if(L.tot<=avail)break}if(L&&L.tot<=avail)break}
+if(!L)L=lay(its.length);
+if(!its.length){pT(c,head?'Nothing listed yet.':'See the full advert for requirements.',ix,top+40,fnt(500,sz0),'#5b6475');return}
+let cy=top;L.ls.forEach((lines,i)=>{const bh=lines.length*L.lh+22;
+c.fillStyle='#1440f0';c.beginPath();c.arc(ix+17,cy+11+L.lh/2,17,0,7);c.fill();c.strokeStyle='#fff';c.lineWidth=3;c.lineCap='round';c.lineJoin='round';c.beginPath();c.moveTo(ix+9,cy+11+L.lh/2);c.lineTo(ix+15,cy+17+L.lh/2);c.lineTo(ix+26,cy+5+L.lh/2);c.stroke();
+lines.forEach((ln,j)=>{let px=ix+50;const by=cy+11+L.lh*(j+1)-Math.round(sz*.28);ln.forEach(o=>{const f=fnt(o.b?800:500,sz);c.font=f;pT(c,o.w,px,by,f,'#0d0d0d');px+=c.measureText(o.w+' ').width})});
+if(i<L.ls.length-1){c.fillStyle='#e8ecf5';c.fillRect(ix,cy+bh-1,iw,2)}cy+=bh});}
+function pTW(c,s,font,ls){c.font=font;if('letterSpacing' in c)c.letterSpacing=ls+'px';const w=c.measureText(s).width;if('letterSpacing' in c)c.letterSpacing='0px';return w}
+function pHero(c,P,x,y,w,h,tSize,tMax,o){o=o||{};const badge=o.badge||'NOW HIRING';
+c.save();pRR(c,x,y,w,h,40);c.clip();const gr=c.createLinearGradient(x,y,x+w,y+h);gr.addColorStop(0,'#3b7bf5');gr.addColorStop(1,'#0f4bdc');c.fillStyle=gr;c.fillRect(x,y,w,h);
+c.fillStyle='rgba(255,255,255,.10)';c.beginPath();c.arc(x+w-60,y+20,150,0,7);c.fill();c.fillStyle='rgba(0,20,120,.18)';c.beginPath();c.arc(x+w*.72,y+h+10,130,0,7);c.fill();c.restore();
+const bw=Math.round(pTW(c,badge,fnt(800,21),5))+84;pRR(c,x+34,y+36,bw,43,22);c.fillStyle='#fff';c.fill();c.fillStyle='#1440f0';c.beginPath();c.arc(x+62,y+57,7,0,7);c.fill();pT(c,badge,x+84,y+66,fnt(800,21),'#1440f0',{ls:5});
+const subL=o.sub?pLines(c,o.sub,w-68,500,30).slice(0,2):null;const dy=subL?y+h-(subL.length*38+40):y+h-88;
+const tw=w-68;let sz=tSize,lines,lh;
+for(;sz>=30;sz-=2){lines=pLines(c,P.title,tw,800,sz);c.font=fnt(800,sz);lh=Math.round(sz*1.04);if(lines.length<=tMax&&Math.max(...lines.map(l=>c.measureText(l).width))<=tw&&lines.length*lh<=dy-18-(y+98))break}
+lines=lines.slice(0,tMax);const ty=y+104+sz*.86;lines.forEach((ln,i)=>pT(c,ln,x+34,ty+i*lh,fnt(800,sz),'#fff',{ls:-1}));
+c.fillStyle='rgba(255,255,255,.35)';c.fillRect(x+34,dy,w-68,2);
+if(subL){subL.forEach((l,i)=>pT(c,l,x+34,dy+44+i*38,fnt(500,30),'#fff'));return}
+let px=x+34;P.pills.forEach(s=>{c.font=fnt(700,23);const pw=Math.min(c.measureText(s).width+44,x+w-34-px);if(pw<80)return;pRR(c,px,dy+20,pw,48,24);c.fillStyle='rgba(255,255,255,.14)';c.fill();c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.stroke();let t=s;while(c.measureText(t).width>pw-44&&t.length>3)t=t.slice(0,-2);pT(c,t===s?s:t+'…',px+22,dy+52,fnt(700,23),'#fff');px+=pw+14})}
+function pCompany(c,P,x,y,w,h,v,wide){
+pRR(c,x,y,w,h,36);c.fillStyle='#fff';c.fill();c.strokeStyle='#e3e8f3';c.lineWidth=2;c.stroke();
+c.save();pRR(c,x,y,w,h,36);c.clip();c.fillStyle='#1440f0';c.fillRect(x,y,8,h);c.restore();
+const tx=x+44,tw=w-44-34,cy=y+h/2;
+pIcon(c,'case',tx+11,y+h*(wide?.27:.24),11,'#1440f0');
+pT(c,'HIRING COMPANY',tx+32,y+h*(wide?.27:.24)+7,fnt(800,18),'#1440f0',{ls:4});
+c.fillStyle='#dfe5f0';c.fillRect(tx,y+h*(wide?.38:.36),tw,2);
+const z=pFit(c,P.co.toUpperCase(),tw,800,wide?60:52,26);pT(c,P.co.toUpperCase(),tx,y+h*(wide?.66:.66),fnt(800,z),'#0d0d0d',{ls:-1});
+let sx=tx;const sy=y+h*(wide?.88:.88);P.sub.forEach((s,i)=>{pIcon(c,i?'pin':'bldg',sx+11,sy-7,11,'#1440f0');pT(c,s,sx+30,sy,fnt(600,22),'#3a4256');c.font=fnt(600,22);sx+=c.measureText(s).width+64})}
+function pDeadline(c,P,x,y,w,h,stack){
+pRR(c,x,y,w,h,34);c.fillStyle='#0d0d0d';c.fill();const ap=P.apply?'Apply: '+P.apply:'';
+if(!stack){pT(c,'DEADLINE',x+30,y+58,fnt(800,21),'#fff',{ls:5});const z=pFit(c,P.dl,330,800,56,28);pT(c,P.dl,x+30,y+112,fnt(800,z),'#4d7dff',{ls:-1});
+const rw=w-400;let ls=P.note?pLines(c,P.note,rw,500,23).slice(0,2):[];let ty=y+(ap?60:76);ls.forEach((l,i)=>{pT(c,l,x+w-30,ty+i*30,fnt(500,23),'#fff',{align:'right'})});
+if(ap){const z2=pFit(c,ap,rw,800,25,16);pT(c,ap,x+w-30,ty+ls.length*30+8,fnt(800,z2),'#fff',{align:'right'})}}
+else{pT(c,'DEADLINE',x+32,y+h/2-70,fnt(800,22),'#fff',{ls:5});const z=pFit(c,P.dl,w-64,800,60,28);pT(c,P.dl,x+32,y+h/2-14,fnt(800,z),'#4d7dff',{ls:-1});let ty=y+h/2+34;
+if(P.note)pLines(c,P.note,w-64,500,24).slice(0,2).forEach(l=>{pT(c,l,x+32,ty,fnt(500,24),'#fff');ty+=32});
+if(ap){const z2=pFit(c,ap,w-64,800,26,16);pT(c,ap,x+32,ty+8,fnt(800,z2),'#fff')}}}
+function pContacts(){const w=st('wa');return[['fb','Facebook','WorkMw','#1440f0'],['wa','WhatsApp',st('phone')||'+265 999 970 744','#22c55e'],['grp','WhatsApp Group & Channel','WorkMw Job Vacancies','#22c55e'],['mail','Email',st('email')||'Workmw.support@gmail.com','#ef4444'],['web','Website',st('site')||'Workmw.com','#1440f0'],['pin','Location','Lilongwe, Malawi','#ef4444']]}
+function pSideBar(c,badge,ct,logo,H){H=H||PH;const dH=H-PH;
+pRR(c,0,0,360,H,[0,72,72,0]);c.fillStyle='#0d0d0d';c.fill();
+pRR(c,32,44,298,74,22);c.fillStyle='#fff';c.fill();if(logo&&logo.naturalWidth){const lw=262,lh=lw*logo.naturalHeight/logo.naturalWidth;c.drawImage(logo,49,81-lh/2,lw,lh)}
+const bw=Math.min(298,Math.max(150,Math.round(pTW(c,badge,fnt(800,26),6))+70));pRR(c,32,140,bw,60,30);c.fillStyle='#1440f0';c.fill();pT(c,badge,32+bw/2+3,180,fnt(800,26),'#fff',{align:'center',ls:6});
+pT(c,'GET IN TOUCH',32,256,fnt(800,16),'#4d7dff',{ls:5});c.fillStyle='#1440f0';c.fillRect(32,268,298,3);
+ct.forEach((r,i)=>{const cy=339+i*(136+dH/5);pIcon(c,r[0],57,cy,25,r[3]);pT(c,r[1],96,cy-12,fnt(500,15),'#cbd5e1');const z=pFit(c,r[2],240,800,22,13);pT(c,r[2],96,cy+14,fnt(800,z),'#fff');if(i<5){c.fillStyle='#262626';c.fillRect(32,cy+67+dH/10,298,2)}});
+const ay=1115+dH;pRR(c,32,ay,298,199,28);c.fillStyle='#1440f0';c.fill();let az=25,al;for(;az>=18;az--){al=pLines(c,'Grow your reach: advertise your jobs and business on WorkMw',252,800,az);if(al.length<=3)break}al.forEach((l,i)=>pT(c,l,54,ay+37+i*(az+4),fnt(800,az),'#fff'));c.fillStyle='rgba(255,255,255,.3)';c.fillRect(54,ay+119,254,2);pLines(c,'Building the future of work in Malawi',250,500,18).forEach((l,i)=>pT(c,l,54,ay+147+i*24,fnt(500,18),'#dbe6ff'))}
+function pTop(c,badge,logo){
+if(logo&&logo.naturalWidth){const lw=406,lh=lw*logo.naturalHeight/logo.naturalWidth;c.drawImage(logo,56,82-lh/2,lw,lh)}
+const bw=Math.max(190,Math.round(pTW(c,badge,fnt(800,25),6))+78);pRR(c,1024-bw,52,bw,58,29);c.fillStyle='#0d0d0d';c.fill();pT(c,badge,1024-bw/2+3,90,fnt(800,25),'#fff',{align:'center',ls:6})}
+function pFooter(c,ct,o){const k=o.k;pRR(c,0,o.top,PW,PH-o.top+60,[64,64,0,0]);c.fillStyle='#0d0d0d';c.fill();
+[0,2,4,1,3,5].forEach((ri,i)=>{const r=ct[ri],col=i<3?0:1,row=i%3,cx=col?578:128,cy=o.cy0+row*o.gap,tx=cx+o.ir+8;pIcon(c,r[0],cx,cy,o.ir,r[3]);pT(c,r[1],tx,cy-9*k,fnt(500,o.lsz),'#cbd5e1');const z=pFit(c,r[2],col?400:370,800,o.vsz,13);pT(c,r[2],tx,cy+15*k,fnt(800,z),'#fff')});
+pRR(c,104,o.barY,872,o.barH,o.barH/2);c.fillStyle='#1440f0';c.fill();const z=pFit(c,o.bar,840,800,o.bs,14);pT(c,o.bar,540,o.barY+o.barH/2+z*.35,fnt(800,z),'#fff',{align:'center'});
+c.fillStyle='#262626';c.fillRect(104,o.lineY,872,2);pT(c,'Building the future of work in Malawi',540,o.tagY,fnt(700,22*k),'#4d7dff',{align:'center',ls:2})}
+function drawPoster(cv,v,layout){
+cv.width=PW;cv.height=PH;const c=cv.getContext('2d'),P=pData(v),logo=document.querySelector('.top img'),ct=pContacts();
+c.fillStyle='#f3f6fc';c.fillRect(0,0,PW,PH);
+if(layout==='side'){pSideBar(c,'VACANCY',ct,logo);pCompany(c,P,404,44,628,245,v,false);pHero(c,P,404,316,628,379,64,3);pReqs(c,P,404,721,628,417,28,19);pDeadline(c,P,404,1164,628,142,false)}
+else{pTop(c,'VACANCY',logo);pCompany(c,P,56,148,968,190,v,true);pHero(c,P,56,362,968,316,66,2);pReqs(c,P,56,702,516,354,24,16);pDeadline(c,P,596,702,428,354,true);
+pFooter(c,ct,{top:1072,cy0:1120,gap:53,barY:1250,barH:40,lineY:1302,tagY:1334,k:1,ir:25,lsz:14,vsz:22,bs:22,bar:'Grow your reach: advertise your jobs and business on WorkMw'})}}
+function pKick(c,x,y,w,h,kick,tag){
+pRR(c,x,y,w,h,36);c.fillStyle='#fff';c.fill();c.strokeStyle='#e3e8f3';c.lineWidth=2;c.stroke();
+c.save();pRR(c,x,y,w,h,36);c.clip();c.fillStyle='#1440f0';c.fillRect(x,y,8,h);c.restore();
+const tx=x+44,tw=w-44-34;c.fillStyle='#1440f0';c.beginPath();c.arc(tx+8,y+71,8,0,7);c.fill();
+pT(c,kick.toUpperCase(),tx+30,y+78,fnt(800,22),'#1440f0',{ls:5});c.fillStyle='#dfe5f0';c.fillRect(tx,y+99,tw,2);
+let sz=42,ls=[];for(;sz>=22;sz-=2){ls=pLines(c,tag,tw,800,sz);if(ls.length<=3&&ls.length*Math.round(sz*1.18)<=h-100-30)break}
+const lh=Math.round(sz*1.18),top=y+101+(h-101-ls.length*lh)/2;ls.forEach((l,i)=>pT(c,l,tx,top+lh*(i+1)-sz*.3,fnt(800,sz),'#0d0d0d'))}
+function pCta(c,x,y,w,h,label,big,note){
+pRR(c,x,y,w,h,34);c.fillStyle='#0d0d0d';c.fill();
+const nl=note?pLines(c,note,270,500,23).slice(0,3):[];const nw=nl.length?Math.max(...nl.map(l=>{c.font=fnt(500,23);return c.measureText(l).width})):0;
+pT(c,label.toUpperCase(),x+30,y+58,fnt(800,21),'#fff',{ls:5});
+const z=pFit(c,big,w-60-nw-30,800,64,28);pT(c,big,x+30,y+h-26,fnt(800,z),'#4d7dff',{ls:-1});
+const lh=30,top=y+h/2-(nl.length*lh)/2;nl.forEach((l,i)=>pT(c,l,x+w-30,top+lh*(i+1)-8,fnt(500,23),'#fff',{align:'right'}))}
+function drawPromo(cv,m,layout){
+cv.width=PW;cv.height=PH;const c=cv.getContext('2d'),ct=pContacts(),logo=document.querySelector('.top img'),t=s=>(s||'').trim();
+const lst=(m.list||'').split('\n').map(x=>x.replace(/^\s*(\d+[.)]|[-•*])\s*/,'').trim()).filter(Boolean).slice(0,6).map(s=>s.split(/\s+/).map(w=>({w,b:false})));
+const P={title:t(m.title).toUpperCase()||'YOUR TITLE HERE',pills:(m.pills||'').split(/[,\n]/).map(t).filter(Boolean).slice(0,4),its:lst};
+const badge=(t(m.badge)||'WorkMw').toUpperCase(),head=(t(m.head)||'What you get').toUpperCase(),kick=t(m.kicker)||'WorkMw';
+c.fillStyle='#f3f6fc';c.fillRect(0,0,PW,PH);
+if(layout==='side'){pSideBar(c,badge,ct,logo);pKick(c,404,44,628,245,kick,t(m.tagline));pHero(c,P,404,316,628,379,64,3,{badge:(t(m.hbadge)||'Now offering').toUpperCase()});pReqs(c,P,404,721,628,417,28,19,head);pCta(c,404,1164,628,142,t(m.ctaLabel)||'Get started',t(m.ctaBig)||'Contact us',t(m.ctaNote))}
+else{pTop(c,badge,logo);pHero(c,P,56,150,968,368,80,2,{badge:kick.toUpperCase(),sub:t(m.tagline)});pReqs(c,P,56,540,968,400,32,20,head);
+pFooter(c,ct,{top:962,cy0:1016,gap:70,barY:1216,barH:47,lineY:1285,tagY:1320,k:1.15,ir:21,lsz:19,vsz:25,bs:26,bar:t(m.bar)||'Send us a message today'})}}
+function drawPreview(){if(pkind==='round'){readRound();drawRound($('pcv'),rstyle)}else if(pkind==='promo'){readPromo();drawPromo($('pcv'),promo,plLayout)}else drawPoster($('pcv'),vacs[cur]||readForm(),plLayout)}
+function dlCanvas(cv,name,btn,label){return new Promise(res=>cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);if(btn){btn.textContent='Downloaded';setTimeout(()=>btn.textContent=label,1800)}res()},'image/png'))}
+const pName=v=>'WorkMw-'+(slug(v.company)||'vacancy')+'-'+(slug((v.position||'').split('|')[0])||'poster')+'.png';
+function setLayout(l){plLayout=l;$('lSide').classList.toggle('on',l==='side');$('lFoot').classList.toggle('on',l==='foot');drawPreview()}
+$('lSide').onclick=()=>setLayout('side');$('lFoot').onclick=()=>setLayout('foot');
+$('pDl').onclick=()=>{vacs[cur]=readForm();dlCanvas($('pcv'),pkind==='round'?'WorkMw-roundup-'+rstyle+'.png':pkind==='promo'?'WorkMw-'+(slug(promo.title)||'poster')+'.png':pName(vacs[cur]),$('pDl'),'Download poster')};
+$('pDlAll').onclick=async()=>{vacs[cur]=readForm();const tmp=document.createElement('canvas');if(window.NATIVE_APP){const fl=[];for(const v of vacs){drawPoster(tmp,v,plLayout);const bl=await new Promise(r=>tmp.toBlob(r,'image/png'));fl.push({name:pName(v),blob:bl})}try{await window.nativeShareFiles(fl,'WorkMw posters');$('pDlAll').textContent='Done'}catch(e){}setTimeout(()=>$('pDlAll').textContent='Download all',1800);return}for(const v of vacs){drawPoster(tmp,v,plLayout);await dlCanvas(tmp,pName(v));await new Promise(r=>setTimeout(r,350))}$('pDlAll').textContent='Downloaded';setTimeout(()=>$('pDlAll').textContent='Download all',1800)};
+let pkind='vac';
+const PK=['badge','kicker','tagline','hbadge','head','title','pills','list','ctaLabel','ctaBig','ctaNote','bar'];
+const ORDER='Send us a message today to order your design';
+const PRE=[
+{n:'CV & cover letter',badge:'Job seekers',kicker:'For job seekers',tagline:'Stand out to employers with a clean, professional application.',hbadge:'Now offering',head:'What you get',title:'CV & Cover Letter Design',pills:'CV, Cover letter, LinkedIn',list:'Modern, easy-to-read CV design\nMatching cover letter\nLinkedIn banner and profile touch-up\nPersonal business card\nReady to send as PDF',ctaLabel:'Get started',ctaBig:'Order Now',ctaNote:ORDER,bar:ORDER},
+{n:'Graphic design',badge:'Design',kicker:'Our services',tagline:'Professional designs for your business, brand and career.',hbadge:'Now offering',head:'What you get',title:'Graphic Design Services',pills:'Logos, Posters, Websites',list:'Logos and brand identity\nPosters, flyers and banners\nBusiness cards and letterheads\nSocial media graphics\nWebsites and landing pages\nInvitations, certificates and more',ctaLabel:'Get started',ctaBig:'Order Now',ctaNote:ORDER,bar:ORDER},
+{n:'Logo & brand',badge:'Business',kicker:'For businesses',tagline:'Look professional and be remembered by your customers.',hbadge:'Now offering',head:'What you get',title:'Logo & Brand Design',pills:'Logo, Colours, Templates',list:'Logo design\nBrand colours and fonts\nBusiness cards and letterheads\nSocial media profile and cover set\nInvoice and receipt templates',ctaLabel:'Get started',ctaBig:'Order Now',ctaNote:ORDER,bar:ORDER},
+{n:'Vacancy posters & ads',badge:'Employers',kicker:'For employers',tagline:'Reach the right candidates on Facebook and WhatsApp.',hbadge:'Now offering',head:'What you get',title:'Vacancy Posters & Recruitment Ads',pills:'Posters, Facebook, WhatsApp',list:'Branded vacancy posters\nAds for Facebook and WhatsApp status\nCompany profile design\nAdvertise your job on WorkMw',ctaLabel:'Get started',ctaBig:'Order Now',ctaNote:ORDER,bar:ORDER},
+{n:'Events & flyers',badge:'Events',kicker:'Events and organisations',tagline:'For schools, churches, NGOs and every special occasion.',hbadge:'Now offering',head:'What you get',title:'Invitations, Flyers & Event Designs',pills:'Invitations, Flyers, Certificates',list:'Event invitations and programmes\nPosters, flyers and banners\nCertificates and tickets\nNewsletters and presentations\nBanners and backdrops for print',ctaLabel:'Get started',ctaBig:'Order Now',ctaNote:ORDER,bar:ORDER},
+{n:'Post your vacancy',badge:'Employers',kicker:'Vacancy posting',tagline:'Reach job seekers across Malawi.',hbadge:'Now open',head:'What you get',title:'Post Your Vacancy on WorkMw',pills:'Facebook, WhatsApp, Posters',list:'Your vacancy shared on our Facebook page\nPosted in our WhatsApp group and channel\nBranded vacancy poster design available',ctaLabel:'Looking to hire?',ctaBig:'Post Now',ctaNote:'Send us your vacancy today on WhatsApp',bar:'Send us your vacancy today on WhatsApp'},
+{n:'Follow WorkMw',badge:'Vacancies',kicker:'For job seekers',tagline:'Follow WorkMw for the latest vacancy postings.',hbadge:'Jobs in Malawi',head:'What we do',title:'Find Your Next Job in Malawi',pills:'Jobs, Tips, Malawi',list:'Share job and work opportunities across Malawi\nHelp you get noticed by employers\nGive practical tips to help you apply with confidence',ctaLabel:'Follow & share',ctaBig:'WorkMw',ctaNote:'Looking for work or looking to hire? WorkMw is here for you.',bar:'Follow WorkMw for the latest vacancies'},
+{n:'Introducing WorkMw',badge:'Welcome',kicker:'About WorkMw',tagline:'A Malawian platform that connects job seekers with work opportunities, and helps employers reach the right people.',hbadge:'Introducing',head:'What we do',title:'Introducing WorkMw',pills:'Job seekers, Employers',list:'Share job and work opportunities across Malawi\nHelp you get noticed by employers\nGive practical tips to help you apply with confidence',ctaLabel:'Follow & share',ctaBig:'WorkMw',ctaNote:'Follow and share with someone who needs it',bar:'Follow and share WorkMw with someone who needs it'}];
+let promo=Object.assign({},PRE[0]);delete promo.n;
+try{const o=JSON.parse(localStorage.getItem('workmw_promo')||'null');if(o)PK.forEach(k=>{if(typeof o[k]==='string')promo[k]=o[k]})}catch(e){}
+function writePromo(m){PK.forEach(k=>$('p_'+k).value=m[k]||'')}
+function readPromo(){PK.forEach(k=>promo[k]=$('p_'+k).value);try{localStorage.setItem('workmw_promo',JSON.stringify(promo))}catch(e){}}
+writePromo(promo);
+$('presets').innerHTML=PRE.map((p,i)=>`<button type="button" data-pre="${i}">${p.n}</button>`).join('');
+$('presets').onclick=e=>{const b=e.target.closest('button');if(!b)return;const p=PRE[+b.dataset.pre];promo=Object.assign({},p);delete promo.n;writePromo(promo);render()};
+$('pClear').onclick=()=>{PK.forEach(k=>promo[k]='');writePromo(promo);render()};
+function setKind(k){pkind=k;$('kVac').classList.toggle('on',k==='vac');$('kPromo').classList.toggle('on',k==='promo');$('kRound').classList.toggle('on',k==='round');$('lRow').style.display=k==='round'?'none':'flex';$('rStyles').style.display=k==='round'?'flex':'none';$('rNote').hidden=k!=='round';render()}
+$('kVac').onclick=()=>setKind('vac');$('kPromo').onclick=()=>setKind('promo');$('kRound').onclick=()=>setKind('round');
+/* ===== ROUNDUP POSTERS ===== */
+let rstyle='dark';const RK=['head','sub','cta'];let rnd={head:'',sub:'',cta:''};
+try{const o=JSON.parse(localStorage.getItem('workmw_round')||'null');if(o)RK.forEach(k=>{if(typeof o[k]==='string')rnd[k]=o[k]})}catch(e){}
+function readRound(){RK.forEach(k=>rnd[k]=$('r_'+k).value);try{localStorage.setItem('workmw_round',JSON.stringify(rnd))}catch(e){}}
+RK.forEach(k=>$('r_'+k).value=rnd[k]);
+const sdate=d=>{if(!/^\d{4}-\d\d-\d\d$/.test(d||''))return'';const p=d.split('-');return (+p[2])+' '+MONS[+p[1]-1]};
+const fdate=d=>{if(!/^\d{4}-\d\d-\d\d$/.test(d||''))return'';const p=d.split('-');return (+p[2])+' '+MONS[+p[1]-1]+' '+p[0]};
+function rRows(sort){const out=[];vacs.forEach(v=>{if(!(v&&(v.company||v.position)))return;const co=nice(v.company),loc=(v.location||'').replace(/\s*\(.*?\)/g,'').replace(/,?\s*Malawi\s*$/i,'').trim();const ts=titlesOf(v.position);(ts.length?ts:['Vacancy']).forEach(t=>out.push({t,co,loc,dl:v.deadline||'',v}))});if(sort)out.sort((a,b)=>(a.dl||'9999')<(b.dl||'9999')?-1:a.dl===b.dl?0:1);return out}
+function rRange(rows){const d=rows.map(r=>r.dl).filter(Boolean).sort();if(!d.length)return'';const a=d[0].split('-'),b=d[d.length-1].split('-');if(d[0]===d[d.length-1])return (+a[2])+' '+MONFULL[+a[1]-1];if(a[1]===b[1])return (+a[2])+'–'+(+b[2])+' '+MONFULL[+b[1]-1];return sdate(d[0])+' – '+sdate(d[d.length-1])}
+const MONFULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function pRich(c,text,cx,y,sz,colN,colH,maxW,lh){const lines=[];c.font=fnt(800,sz);const sp=c.measureText(' ').width;
+text.split('|').forEach(part=>{const ws=[];part.split(/(\{[^}]*\})/).forEach(seg=>{const h=/^\{/.test(seg);seg=seg.replace(/[{}]/g,'');seg.split(/\s+/).filter(Boolean).forEach(w=>ws.push({w,h}))});
+let cur=[],cw=0;ws.forEach(o=>{c.font=fnt(800,sz);const w=c.measureText(o.w).width;if(cur.length&&cw+sp+w>maxW){lines.push({a:cur,w:cw});cur=[];cw=0}cw+=(cur.length?sp:0)+w;cur.push(o)});if(cur.length)lines.push({a:cur,w:cw})});
+lines.forEach((l,i)=>{let x=cx-l.w/2;l.a.forEach(o=>{pT(c,o.w,x,y+i*lh,fnt(800,sz),o.h?colH:colN);c.font=fnt(800,sz);x+=c.measureText(o.w+' ').width})});return lines.length}
+function rEmpty(c,W,H){c.fillStyle='#f3f6fc';c.fillRect(0,0,W,H);pT(c,'Add vacancies first',W/2,H/2-10,fnt(800,46),'#0d0d0d',{align:'center'});pT(c,'Use Auto-fill on the Generator tab, then come back here.',W/2,H/2+40,fnt(500,26),'#5b6475',{align:'center'})}
+function rButtons(c,x,y,w,h,k){/* two social buttons */}
+function drawDark(cv){cv.width=PW;cv.height=PH;const c=cv.getContext('2d'),logo=document.querySelector('.top img');let rows=rRows(true);const total=rows.length;if(!total){rEmpty(c,PW,PH);return}rows=rows.slice(0,5);const n=rows.length;
+c.fillStyle='#0d1b4b';c.fillRect(0,0,PW,PH);c.fillStyle='#1240a8';c.beginPath();c.arc(1130,300,380,0,7);c.fill();c.fillStyle='#0c2d86';c.beginPath();c.arc(60,1420,430,0,7);c.fill();
+pRR(c,0,-80,PW,248,[0,0,60,60]);c.fillStyle='#f3f6fc';c.fill();pTop(c,'VACANCIES',logo);
+const head=(rnd.head.trim()||(total+' job'+(total>1?'s':'')+'|closing soon')).split('|');
+const hs=Math.min(...head.map(l=>pFit(c,l.trim(),960,800,112,56)));head.slice(0,2).forEach((l,i)=>pT(c,l.trim(),58,290+i*96*hs/112*1.0+ (i?0:0),fnt(800,hs),i?'#6b9cff':'#fff',{ls:-2}));
+const sub=rnd.sub.trim()||'Real vacancies in Malawi · apply before the deadline';const sz=pFit(c,sub,960,500,32,20);pT(c,sub,60,290+(Math.min(head.length,2)-1)*96*hs/112+60,fnt(500,sz),'#cfd8ff');
+const fy=1298,by=fy-26-22-114,ctaY=by-36;const cs=470,ce=ctaY-62,gap=16,h=Math.min(108,Math.floor((ce-cs)/n)-gap);
+rows.forEach((r,i)=>{const y=cs+i*(h+gap);pRR(c,60,y,960,h,h*.28);c.fillStyle='#fff';c.fill();c.fillStyle='#0d0d0d';c.beginPath();c.arc(120,y+h/2,Math.min(26,h*.26),0,7);c.fill();pT(c,String(i+1),120,y+h/2+9,fnt(800,26),'#fff',{align:'center'});
+const dl=sdate(r.dl);const tx=172,mw=1020-26-(dl?170:0)-tx;if(dl){const cw=140,ch=Math.min(70,h-24),cx=1020-26-cw;pRR(c,cx,y+(h-ch)/2,cw,ch,20);c.fillStyle='#e6edfd';c.fill();pT(c,'CLOSES',cx+cw/2,y+h/2-6,fnt(800,14),'#1440f0',{align:'center',ls:3});pT(c,dl,cx+cw/2,y+h/2+24,fnt(800,28),'#1440f0',{align:'center'})}
+const z=pFit(c,r.t,mw,800,34,18);pT(c,r.t,tx,y+h/2-4,fnt(800,z),'#0d0d0d');const sb=[r.co,r.loc].filter(Boolean).join(' · ');const z2=pFit(c,sb,mw,500,26,14);pT(c,sb,tx,y+h/2+28,fnt(500,z2),'#5b6475')});
+pRich(c,rnd.cta.trim()||'Qualifications & how to apply? {Get full details here} 👇',PW/2,ctaY,36,'#fff','#5b8dff',960,46);
+const wa=st('wa');
+pRR(c,60,by,470,114,36);c.fillStyle='#25d366';c.fill();c.fillStyle='#fff';c.beginPath();c.arc(118,by+57,36,0,7);c.fill();pIcon(c,'wa',118,by+57,36,'#fff','#25d366');pT(c,'WhatsApp Channel',172,by+50,fnt(800,20),'#0b3d1e');const z3=pFit(c,'WorkMw Job Vacancies',340,800,32,16);pT(c,'WorkMw Job Vacancies',172,by+88,fnt(800,z3),'#0b3d1e');
+pRR(c,550,by,470,114,36);c.fillStyle='#1877f2';c.fill();c.fillStyle='#fff';c.beginPath();c.arc(608,by+57,36,0,7);c.fill();pIcon(c,'fb',608,by+57,36,'#fff','#1877f2');pT(c,'Facebook Page',662,by+50,fnt(800,20),'#fff');pT(c,'WorkMw',662,by+88,fnt(800,32),'#fff');
+pIcon(c,'web',82,fy,22,'#1440f0');pT(c,st('site')||'Workmw.com',114,fy+10,fnt(800,28),'#fff');const ph=st('phone')||'+265 999 970 744';c.font=fnt(800,28);const pw=c.measureText(ph).width;pT(c,ph,1020,fy+10,fnt(800,28),'#fff',{align:'right'});pIcon(c,'wa',1020-pw-34,fy,22,'#22c55e');
+$('rNote').textContent=total>n?'Showing the first '+n+' of '+total+' vacancies. Try the Story list style for up to 6.':'Built from the '+total+' vacanc'+(total>1?'ies':'y')+' in the generator, sorted by closing date.'}
+function drawStory(cv){const H=1920;cv.width=PW;cv.height=H;const c=cv.getContext('2d'),logo=document.querySelector('.top img');let rows=rRows(true);const total=rows.length;if(!total){rEmpty(c,PW,H);return}rows=rows.slice(0,6);const n=rows.length;
+c.fillStyle='#f3f6fc';c.fillRect(0,0,PW,H);pTop(c,'VACANCIES',logo);
+const hd=(rnd.head.trim()||'Jobs in Malawi');let parts,hs=120;
+for(;hs>=60;hs-=4){parts=hd.includes('|')?hd.split('|').map(s=>s.trim()):pLines(c,hd,860,800,hs);c.font=fnt(800,hs);if(parts.length<=3&&Math.max(...parts.map(l=>c.measureText(l).width))<=900)break}
+const lh=Math.round(hs*.98),top=176,b1=top+80+hs*.78,bn=b1+(parts.length-1)*lh;
+const sub=rnd.sub.trim()||(total+' real vacanc'+(total>1?'ies':'y')+(rRange(rows)?' · closing '+rRange(rows):''));const subY=bn+66,hb=subY+86;
+c.save();pRR(c,0,top,PW,hb-top,[0,0,70,70]);c.clip();c.fillStyle='#1456f4';c.fillRect(0,top,PW,hb-top);c.strokeStyle='rgba(255,255,255,.10)';c.lineWidth=90;c.beginPath();c.arc(1000,top+60,330,0,7);c.stroke();c.restore();
+parts.forEach((l,i)=>pT(c,l,56,b1+i*lh,fnt(800,hs),'#fff',{ls:-2}));const sz=pFit(c,sub,960,500,32,18);pT(c,sub,58,subY,fnt(500,sz),'#cfdcff');
+const fy=H-70,fbY=fy-48-126,gY=fbY-62-186,ctaTxt=rnd.cta.trim()||'Want the {full details}|and how to apply?';
+const cs=hb-28,ctaB=gY-50-62,ce=ctaB-54,gap=20,h=Math.max(86,Math.min(130,Math.floor((ce-cs)/n)-gap));
+rows.forEach((r,i)=>{const y=cs+i*(h+gap),col=i===0?'#ea580c':(i===n-1&&n>=3)?'#0d0d0d':'#1440f0';
+c.save();c.shadowColor='rgba(20,50,150,.14)';c.shadowBlur=28;c.shadowOffsetY=8;pRR(c,64,y,952,h,30);c.fillStyle='#fff';c.fill();c.restore();
+c.save();pRR(c,64,y,952,h,30);c.clip();c.fillStyle=col;c.fillRect(64,y,12,h);c.restore();
+const dl=sdate(r.dl);if(dl){pT(c,'CLOSES',171,y+h*.38,fnt(800,15),'#6b7280',{align:'center',ls:3});const z=pFit(c,dl,150,800,40,20);pT(c,dl,171,y+h*.74,fnt(800,z),col,{align:'center'})}
+const tx=dl?300:100,mw=1016-30-tx;const z=pFit(c,r.t,mw,800,32,18);pT(c,r.t,tx,y+h/2-2,fnt(800,z),'#0d0d0d');const sb=[r.co,r.loc].filter(Boolean).join(' · ');const z2=pFit(c,sb,mw,500,25,14);pT(c,sb,tx,y+h/2+30,fnt(500,z2),'#5b6475')});
+pRich(c,ctaTxt,PW/2,ctaB,52,'#0d0d0d','#1440f0',940,62);
+c.save();c.shadowColor='rgba(37,211,102,.35)';c.shadowBlur=30;c.shadowOffsetY=10;pRR(c,64,gY,952,186,46);c.fillStyle='#25d366';c.fill();c.restore();
+c.fillStyle='#fff';c.beginPath();c.arc(162,gY+93,62,0,7);c.fill();pIcon(c,'wa',162,gY+93,62,'#fff','#25d366');pT(c,'Join our WhatsApp Channel',254,gY+66,fnt(800,27),'#0b3d1e');const z4=pFit(c,'WorkMw Job Vacancies',730,800,58,24);pT(c,'WorkMw Job Vacancies',254,gY+128,fnt(800,z4),'#0b3d1e');pT(c,'Get every vacancy as it is posted',254,gY+166,fnt(500,26),'#14532d');
+pT(c,'OR',PW/2,fbY-24,fnt(800,22),'#6b7280',{align:'center',ls:8});
+pRR(c,64,fbY,952,126,42);c.fillStyle='#1877f2';c.fill();c.fillStyle='#fff';c.beginPath();c.arc(150,fbY+63,46,0,7);c.fill();pIcon(c,'fb',150,fbY+63,46,'#fff','#1877f2');pT(c,'Find us on Facebook',224,fbY+54,fnt(800,25),'#fff');pT(c,'WorkMw',224,fbY+102,fnt(800,46),'#fff');
+pIcon(c,'web',90,fy,26,'#1440f0');pT(c,st('site')||'Workmw.com',132,fy+11,fnt(800,32),'#0d0d0d');const ph=st('phone')||'+265 999 970 744';c.font=fnt(800,32);const pw=c.measureText(ph).width;pT(c,ph,1016,fy+11,fnt(800,32),'#0d0d0d',{align:'right'});pIcon(c,'wa',1016-pw-40,fy,26,'#22c55e');
+$('rNote').textContent=total>n?'Showing the first '+n+' of '+total+' vacancies.':'Built from the '+total+' vacanc'+(total>1?'ies':'y')+' in the generator, sorted by closing date. 1080 × 1920 for status and stories.'}
+function rItems(v){return items((v.req||'').split('\n').filter(l=>l.trim()&&!l.trim().startsWith('## ')).join('\n')).slice(0,3).map(s=>{s=s.replace(/\s+$/,'');if(s.length>130){s=s.slice(0,130);s=s.slice(0,s.lastIndexOf(' '))+'…'}return s.split(/\s+/).map(w=>({w,b:false}))})}
+function rClose(v){const d=fdate(v.deadline);let ap='';const t=s=>(s||'').trim();if(t(v.applyLink)){try{ap='Apply online at '+new URL(v.applyLink).host.replace(/^www\./,'')+(new URL(v.applyLink).pathname.length>1?new URL(v.applyLink).pathname.replace(/\/$/,''):'')}catch(e){ap='Apply online at '+t(v.applyLink)}}else if(t(v.applyEmail))ap='Email '+t(v.applyEmail).split(/\s+or\s+/)[0];
+const tx=t(v.applyText).replace(/[:\s]+$/,'');let rest=[ap,tx].filter(Boolean).join(' – ');if(rest.length>170)rest=rest.slice(0,170).replace(/\s\S*$/,'')+'…';
+const w=[];(d?'Closes '+d+'.':'').split(' ').filter(Boolean).forEach(x=>w.push({w:x,b:true}));rest.split(/\s+/).filter(Boolean).forEach(x=>w.push({w:x,b:false}));return w}
+function pDraw(c,lines,x,y,lh,sz,cb,cn){lines.forEach((ln,j)=>{let px=x;ln.forEach(o=>{const f=fnt(o.b?800:500,sz);pT(c,o.w,px,y+j*lh,f,o.b?cb:cn);c.font=f;px+=c.measureText(o.w+' ').width})})}
+function pCheck(c,x,y,r){c.fillStyle='#1440f0';c.beginPath();c.arc(x,y,r,0,7);c.fill();c.strokeStyle='#fff';c.lineWidth=2.6;c.lineCap='round';c.lineJoin='round';c.beginPath();c.moveTo(x-r*.42,y);c.lineTo(x-r*.1,y+r*.34);c.lineTo(x+r*.45,y-r*.3);c.stroke()}
+function rDetail(c,H,rows,logo,ct){
+c.fillStyle='#f3f6fc';c.fillRect(0,0,PW,H);pSideBar(c,'VACANCIES',ct,logo,H);
+const X=404,W=628,groups=[];rows.forEach(r=>{const k=r.co.toLowerCase();let g=groups.find(x=>x.k===k);if(!g){g={k,co:r.co,list:[]};groups.push(g)}g.list.push(r)});
+pRR(c,X,44,W,200,36);c.fillStyle='#fff';c.fill();c.strokeStyle='#e3e8f3';c.lineWidth=2;c.stroke();c.save();pRR(c,X,44,W,200,36);c.clip();c.fillStyle='#1440f0';c.fillRect(X,44,8,200);c.restore();
+c.fillStyle='#1440f0';c.beginPath();c.arc(X+52,44+62,8,0,7);c.fill();pT(c,'NOW HIRING',X+74,44+69,fnt(800,22),'#1440f0',{ls:5});
+const pill=rows.length+' OPEN ROLE'+(rows.length>1?'S':'');const pw=Math.round(pTW(c,pill,fnt(800,16),3))+40;const hd=rnd.head.trim()||'Open vacancies';const hz=pFit(c,hd,W-44-34-pw-22,800,48,24);c.font=fnt(800,hz);const hw=c.measureText(hd).width;pT(c,hd,X+44,44+128,fnt(800,hz),'#0d0d0d',{ls:-1});
+pRR(c,X+44+hw+20,44+128-hz*.62-6,pw,40,20);c.fillStyle='#1440f0';c.fill();pT(c,pill,X+44+hw+20+pw/2+1.5,44+128-hz*.62+20,fnt(800,16),'#fff',{align:'center',ls:3});
+pT(c,rnd.sub.trim()||('From '+groups.length+' employer'+(groups.length>1?'s':'')),X+44,44+180,fnt(800,28),'#0d0d0d');
+let y=268;const IW=W-60,TW=IW-44;
+groups.forEach((g,gi)=>{
+const blocks=g.list.map(r=>{const its=rItems(r.v).map(w=>pWrap(c,w,TW,24));const cl=pWrap(c,rClose(r.v),IW,21);return{r,its,cl}});
+let h=30+58+14;blocks.forEach((b,i)=>{h+=56+16+38+12;b.its.forEach(l=>h+=l.length*32+8);h+=b.cl.length*27+8;if(i<blocks.length-1)h+=26});h+=26;
+pRR(c,X,y,W,h,34);c.fillStyle='#fff';c.fill();c.strokeStyle='#e3e8f3';c.lineWidth=2;c.stroke();
+c.fillStyle='#0d0d0d';c.beginPath();c.arc(X+30+22,y+30+22,22,0,7);c.fill();pT(c,String(gi+1),X+52,y+61,fnt(800,24),'#fff',{align:'center'});pT(c,g.co,X+30+58,y+62,fnt(800,pFit(c,g.co,IW-58,800,34,18)),'#0d0d0d');
+let cy=y+30+58+14;
+blocks.forEach((b,i)=>{pRR(c,X+30,cy,IW,56,28);c.fillStyle='#1440f0';c.fill();const t=b.r.t+(b.r.loc?' – '+b.r.loc:'');pT(c,t,X+30+24,cy+37,fnt(800,pFit(c,t,IW-48,800,26,14)),'#fff');cy+=56+16;
+const cw=Math.round(pTW(c,'KEY QUALIFICATIONS',fnt(800,15),4))+36;pRR(c,X+30,cy,cw,38,10);c.fillStyle='#e6edfd';c.fill();pT(c,'KEY QUALIFICATIONS',X+30+18,cy+25,fnt(800,15),'#1440f0',{ls:4});cy+=38+12;
+b.its.forEach(l=>{pCheck(c,X+30+13,cy+14,13);pDraw(c,l,X+30+44,cy+21,32,24,'#0d0d0d','#0d0d0d');cy+=l.length*32+8});
+pDraw(c,b.cl,X+30,cy+18,27,21,'#0d0d0d','#5b6475');cy+=b.cl.length*27+8;if(i<blocks.length-1)cy+=26});
+y+=h+22});
+pCta(c,X,y,W,150,'Interested?','Apply Now','Apply on '+(st('site')||'Workmw.com'));
+pT(c,'Applications go directly to each employer. Never pay a fee to apply.',X+6,y+150+34,fnt(500,19),'#6b7280');return y+150+60}
+function drawDetail(cv){const logo=document.querySelector('.top img'),ct=pContacts(),rows=rRows(false).slice(0,8),total=rRows(false).length;
+if(!rows.length){cv.width=PW;cv.height=PH;rEmpty(cv.getContext('2d'),PW,PH);return}
+const sc=document.createElement('canvas');sc.width=PW;sc.height=7000;const end=rDetail(sc.getContext('2d'),7000,rows,logo,ct);
+const H=Math.max(PH,Math.round(end));cv.width=PW;cv.height=H;rDetail(cv.getContext('2d'),H,rows,logo,ct);
+$('rNote').textContent=total>rows.length?'Showing the first 8 of '+total+' vacancies.':'Built from the '+total+' vacanc'+(total>1?'ies':'y')+' in the generator, grouped by employer. The poster grows to fit.'}
+function drawRound(cv,s){({dark:drawDark,story:drawStory,detail:drawDetail}[s]||drawDark)(cv)}
+function setStyle(s){rstyle=s;$('sDark').classList.toggle('on',s==='dark');$('sStory').classList.toggle('on',s==='story');$('sDet').classList.toggle('on',s==='detail');render()}
+$('sDark').onclick=()=>setStyle('dark');$('sStory').onclick=()=>setStyle('story');$('sDet').onclick=()=>setStyle('detail');
+try{document.fonts.load('800 40px "Plus Jakarta Sans"').then(()=>document.fonts.load('500 20px "Plus Jakarta Sans"')).then(()=>{if(mode==='poster')drawPreview()})}catch(e){}
+
+render();
+initStore();
+</script>
+</body>
+</html>

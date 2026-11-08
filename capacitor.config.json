@@ -1,0 +1,17 @@
+{
+  "appId": "com.hcconsultants.workmw",
+  "appName": "WorkMw Generator",
+  "webDir": "www",
+  "backgroundColor": "#0b1020",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#1440F0",
+      "showSpinner": false
+    },
+    "SystemBars": {
+      "insetsHandling": "native",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}
