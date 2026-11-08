@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     env:
       APP_VERSION_CODE: ${{ github.run_number }}
       APP_VERSION_NAME: 1.0.${{ github.run_number }}
@@ -40,6 +40,19 @@ jobs:
       - name: Sync web app into the Android project
         run: npx cap sync android
 
+      - name: Download Gradle (long timeout, with retries)
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          sed -i 's/^networkTimeout=.*/networkTimeout=180000/; s/-all\.zip/-bin.zip/' gradle/wrapper/gradle-wrapper.properties
+          cat gradle/wrapper/gradle-wrapper.properties
+          for i in 1 2 3 4 5; do
+            ./gradlew --version && break
+            echo "Gradle download failed (attempt $i), retrying in 20s..."
+            sleep 20
+          done
+          ./gradlew --version
+
       - name: Prepare release keystore (optional)
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
@@ -56,9 +69,7 @@ jobs:
 
       - name: Build APK
         working-directory: android
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease --no-daemon
 
       - name: Build AAB for Play Store (only with release keystore)
         if: env.KEYSTORE_FILE != ''
